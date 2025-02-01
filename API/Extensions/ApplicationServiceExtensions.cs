@@ -1,5 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation.AspNetCore;
+using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Persistence.Data;
+using Application.Accounts.Register;
+using Application.Core;
+using Domain.Interfaces;
+using Persistence.Repositories;
+using Infrastructure;
 
 namespace API.Extensions;
 
@@ -8,11 +18,38 @@ public static class ApplicationServiceExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services,
         IConfiguration config)
     {
-        services.AddControllers();
+        services.AddControllers(opt =>
+        {
+            var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+            opt.Filters.Add(new AuthorizeFilter(policy));
+        });
 
         services.AddEndpointsApiExplorer();
 
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("SocialNetworkBearerAuth", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                Description = "Input a valid token to access this API."
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "SocialNetworkBearerAuth"
+                        }
+                    }, []
+                }
+            });
+        });
 
         var userInMemoryDatabase = config.GetValue<bool>("UseInMemoryDatabase");
 
@@ -27,6 +64,22 @@ public static class ApplicationServiceExtensions
                 opt.UseSqlServer(config.GetConnectionString("SqlServer"));
             }
         });
+
+        services.AddScoped<IAccountsRepository, AccountsRepository>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RegisterCommand).Assembly));
+
+        services.AddFluentValidationAutoValidation();
+
+        services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
+
+        services.AddHttpContextAccessor();
+
+        services.AddScoped<IUserAccessor, UserAccessor>();
 
         return services;
     }

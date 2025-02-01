@@ -31,7 +31,7 @@ public class Seed
                 LastName = "Milosavljevic",
                 UserName = "igor",
                 Email = "igor@gmail.com",
-                DateOfBirth = new DateTime(1994, 2, 16)
+                DateOfBirth = new DateOnly(1994, 2, 16)
             };
 
             await userManager.CreateAsync(admin, "Pa$$w0rd");
@@ -46,7 +46,7 @@ public class Seed
                     LastName = "Smith",
                     UserName = "jane",
                     Email = "jane@gmail.com",
-                    DateOfBirth = new DateTime(1985, 9, 28)
+                    DateOfBirth = new DateOnly(1985, 9, 28)
                 },
 
                 new ()
@@ -55,7 +55,7 @@ public class Seed
                     LastName = "Johnson",
                     UserName = "michael",
                     Email = "michael@gmail.com",
-                    DateOfBirth = new DateTime(1982, 12, 10)
+                    DateOfBirth = new DateOnly(1982, 12, 10)
                 },
 
                 new ()
@@ -64,7 +64,7 @@ public class Seed
                     LastName = "Brown",
                     UserName = "emily",
                     Email = "emily@gmail.com",
-                    DateOfBirth = new DateTime(1995, 7, 3)
+                    DateOfBirth = new DateOnly(1995, 7, 3)
                 },
 
                 new ()
@@ -73,7 +73,7 @@ public class Seed
                     LastName = "Williams",
                     UserName = "daniel",
                     Email = "daniel@gmail.com",
-                    DateOfBirth = new DateTime(1988, 3, 20)
+                    DateOfBirth = new DateOnly(1988, 3, 20)
                 }
             ];
 
