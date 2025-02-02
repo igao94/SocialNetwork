@@ -29,7 +29,7 @@ public class AccountsRepository(UserManager<AppUser> userManager) : IAccountsRep
 
     public async Task<AppUser?> GetUserByUsernameAsync(string username)
     {
-        return await userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
+        return await userManager.Users.FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 
     public async Task<bool> IsEmailTakenAsync(string email)

@@ -44,7 +44,7 @@ public class RegisterHandler(IUnitOfWork unitOfWork,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
             Token = await tokenService.GetTokenAsync(user),
-            Image = null
+            PhotoUrl = null
         });
     }
 }

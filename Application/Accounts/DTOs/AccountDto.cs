@@ -8,5 +8,5 @@ public class AccountDto
     public string Email { get; set; } = string.Empty;
     public DateOnly DateOfBirth { get; set; }
     public string? Token { get; set; }
-    public string? Image { get; set; }
+    public string? PhotoUrl { get; set; }
 }

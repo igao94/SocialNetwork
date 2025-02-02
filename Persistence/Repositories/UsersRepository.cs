@@ -1,0 +1,38 @@
+﻿using Domain.Entities;
+using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Data;
+
+namespace Persistence.Repositories;
+
+public class UsersRepository(DataContext context) : IUsersRepository
+{
+    public IQueryable<AppUser> GetAllUsersQuery(string currentUserUsername, string? searchTerm)
+    {
+        IQueryable<AppUser> query = context.Users.Where(u => u.UserName != currentUserUsername);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(u => u.FirstName.Contains(searchTerm)
+            || u.LastName.Contains(searchTerm)
+            || u.UserName!.Contains(searchTerm)
+            || u.Email!.Contains(searchTerm));
+        }
+
+        return query;
+    }
+
+    public IQueryable<AppUser> GetUserByUsernameQuery(string username)
+    {
+        IQueryable<AppUser> query = context.Users.Where(u => u.UserName == username.ToLower());
+
+        return query;
+    }
+
+    public async Task<AppUser?> GetUserByUsernameAsync(string username)
+    {
+        return await context.Users.FirstOrDefaultAsync(u => u.UserName == username.ToLower());
+    }
+
+    public void DeleteUser(AppUser user) => context.Users.Remove(user);
+}
