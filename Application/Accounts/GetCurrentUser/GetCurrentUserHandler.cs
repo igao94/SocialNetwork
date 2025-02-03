@@ -13,8 +13,8 @@ public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
     public async Task<Result<AccountDto>?> Handle(GetCurrentUserQuery request,
         CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.AccountRepository
-            .GetUserByUsernameAsync(userAccessor.GetCurrentUserUsername());
+        var user = await unitOfWork.UsersRepository
+            .GetUserWithPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
 
         if (user is null || user.UserName is null || user.Email is null) return null;
 
@@ -26,7 +26,7 @@ public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
             Token = await tokenService.GetTokenAsync(user),
-            PhotoUrl = null
+            PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         });
     }
 }

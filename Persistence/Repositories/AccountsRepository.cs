@@ -22,14 +22,11 @@ public class AccountsRepository(UserManager<AppUser> userManager) : IAccountsRep
         return await userManager.CreateAsync(user, password);
     }
 
-    public async Task<AppUser?> GetUserByEmailAsync(string email)
+    public async Task<AppUser?> GetUserWithPhotosByEmailAsync(string email)
     {
-        return await userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
-    }
-
-    public async Task<AppUser?> GetUserByUsernameAsync(string username)
-    {
-        return await userManager.Users.FirstOrDefaultAsync(u => u.UserName == username.ToLower());
+        return await userManager.Users
+            .Include(u => u.Photos)
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<bool> IsEmailTakenAsync(string email)

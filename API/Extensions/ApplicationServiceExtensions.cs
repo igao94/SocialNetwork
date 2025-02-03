@@ -10,6 +10,8 @@ using Application.Core;
 using Domain.Interfaces;
 using Persistence.Repositories;
 using Infrastructure;
+using Infrastructure.Services.Photos;
+using Application.Interfaces;
 
 namespace API.Extensions;
 
@@ -82,6 +84,10 @@ public static class ApplicationServiceExtensions
         services.AddHttpContextAccessor();
 
         services.AddScoped<IUserAccessor, UserAccessor>();
+
+        services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
+
+        services.AddScoped<IPhotosService, PhotosService>();
 
         return services;
     }

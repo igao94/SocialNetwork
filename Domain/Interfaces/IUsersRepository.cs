@@ -8,4 +8,5 @@ public interface IUsersRepository
     IQueryable<AppUser> GetUserByUsernameQuery(string username);
     Task<AppUser?> GetUserByUsernameAsync(string username);
     void DeleteUser(AppUser user);
+    Task<AppUser?> GetUserWithPhotosByUsernameAsync(string username);
 }

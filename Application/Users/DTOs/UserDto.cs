@@ -1,4 +1,6 @@
-﻿namespace Application.Users.DTOs;
+﻿using Application.Photos.DTOs;
+
+namespace Application.Users.DTOs;
 
 public class UserDto
 {
@@ -9,4 +11,5 @@ public class UserDto
     public string? PhotoUrl {  get; set; } 
     public DateOnly DateOfBirth { get; set; }
     public int Age {  get; set; }
+    public ICollection<PhotoDto> Photos { get; set; } = [];
 }

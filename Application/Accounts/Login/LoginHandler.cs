@@ -11,7 +11,7 @@ public class LoginHandler(IUnitOfWork unitOfWork,
 {
     public async Task<Result<AccountDto>?> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.AccountRepository.GetUserByEmailAsync(request.Email);
+        var user = await unitOfWork.AccountRepository.GetUserWithPhotosByEmailAsync(request.Email);
 
         if (user is null || user.UserName is null || user.Email is null) return null;
 
@@ -27,7 +27,7 @@ public class LoginHandler(IUnitOfWork unitOfWork,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
             Token = await tokenService.GetTokenAsync(user),
-            PhotoUrl = null
+            PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         });
     }
 }

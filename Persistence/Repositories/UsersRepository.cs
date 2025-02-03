@@ -34,5 +34,12 @@ public class UsersRepository(DataContext context) : IUsersRepository
         return await context.Users.FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 
+    public async Task<AppUser?> GetUserWithPhotosByUsernameAsync(string username)
+    {
+        return await context.Users
+            .Include(u => u.Photos)
+            .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
+    }
+
     public void DeleteUser(AppUser user) => context.Users.Remove(user);
 }
