@@ -12,7 +12,7 @@ using Persistence.Data;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250203122630_PhotoEntityAdded")]
+    [Migration("20250204090505_PhotoEntityAdded")]
     partial class PhotoEntityAdded
     {
         /// <inheritdoc />
@@ -128,7 +128,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Photo");
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

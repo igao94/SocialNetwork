@@ -8,4 +8,5 @@ public class AppUser : IdentityUser
     public string LastName { get; set; } = string.Empty;
     public DateOnly DateOfBirth { get; set; }
     public ICollection<Photo> Photos { get; set; } = [];
+    public ICollection<Post> Posts { get; set; } = [];
 }

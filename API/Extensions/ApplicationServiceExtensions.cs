@@ -71,6 +71,10 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IUsersRepository, UsersRepository>();
 
+        services.AddScoped<IPhotosRepository, PhotosRepository>();
+        
+        services.AddScoped<IPostsRepository, PostsRepository>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddAutoMapper(typeof(MappingProfile).Assembly);

@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using Domain.Interfaces;
 using MediatR;
 
@@ -14,13 +15,13 @@ public class SetMainPhotoHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return null;
 
-        var photo = user.Photos.FirstOrDefault(p => p.PhotoId == request.PhotoId);
+        var photo = unitOfWork.PhotosRepository.GetPhotoById(user, request.PhotoId);
 
         if (photo is null) return null;
 
         if (photo.IsMain) return Result<Unit>.Failure("Already main photo.");
 
-        var currentMainPhoto = user.Photos.FirstOrDefault(p => p.IsMain);
+        var currentMainPhoto = unitOfWork.PhotosRepository.GetCurrentMainPhoto(user);
 
         if (currentMainPhoto is not null) currentMainPhoto.IsMain = false;
 

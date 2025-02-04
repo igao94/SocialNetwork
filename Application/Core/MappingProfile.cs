@@ -1,5 +1,7 @@
 ﻿using Application.Helpers;
 using Application.Photos.DTOs;
+using Application.Posts.DTOs;
+using Application.Posts.UpdatePost;
 using Application.Users.DTOs;
 using Application.Users.UpdateUser;
 using AutoMapper;
@@ -19,5 +21,14 @@ public class MappingProfile : Profile
         CreateMap<UpdateUserCommand, AppUser>();
 
         CreateMap<Photo, PhotoDto>();
+
+        CreateMap<Post, PostDto>()
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
+            .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.AppUser.Photos
+                .FirstOrDefault(p => p.IsMain)!.Url));
+
+        CreateMap<PostPhoto, PostPhotoDto>();
+
+        CreateMap<UpdatePostCommand, Post>();
     }
 }

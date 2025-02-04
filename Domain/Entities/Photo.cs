@@ -1,5 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Domain.Entities;
+
+[Table("Photos")]
 public class Photo
 {
     public int PhotoId { get; set; }

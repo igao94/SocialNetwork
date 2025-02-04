@@ -26,7 +26,7 @@ public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
             Token = await tokenService.GetTokenAsync(user),
-            PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
+            PhotoUrl = unitOfWork.UsersRepository.GetMainPhoto(user)
         });
     }
 }

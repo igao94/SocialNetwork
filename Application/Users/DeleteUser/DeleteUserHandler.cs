@@ -12,13 +12,18 @@ public class DeleteUserHandler(IUnitOfWork unitOfWork,
     public async Task<Result<Unit>?> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
+            .GetUserWithPhotosAndPostsByUsernameAsync(userAccessor.GetCurrentUserUsername());
 
         if (user is null) return null;
 
         foreach (var photo in user.Photos)
         {
             await photosService.DeletePhotoAsync(photo.PublicId);
+        }
+
+        foreach (var post in user.Posts)
+        {
+            foreach (var photo in post.PostPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
         }
 
         unitOfWork.UsersRepository.DeleteUser(user);

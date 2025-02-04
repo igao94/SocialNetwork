@@ -30,9 +30,9 @@ public class AddPhotoHandler(IUnitOfWork unitOfWork,
             PublicId = photoUploadResult.PublicId
         };
 
-        if (!user.Photos.Any(p => p.IsMain)) photo.IsMain = true;
+        if (!unitOfWork.PhotosRepository.UserHasAnyPhotos(user)) photo.IsMain = true;
 
-        user.Photos.Add(photo);
+        unitOfWork.PhotosRepository.AddPhoto(user, photo);
 
         var result = await unitOfWork.SaveChangesAsync();
 

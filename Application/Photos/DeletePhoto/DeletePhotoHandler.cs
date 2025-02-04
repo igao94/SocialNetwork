@@ -16,7 +16,7 @@ public class DeletePhotoHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return null;
 
-        var photo = user.Photos.FirstOrDefault(p => p.PhotoId == request.PhotoId);
+        var photo = unitOfWork.PhotosRepository.GetPhotoById(user, request.PhotoId);
 
         if (photo is null) return null;
 
@@ -27,7 +27,7 @@ public class DeletePhotoHandler(IUnitOfWork unitOfWork,
         if (string.IsNullOrEmpty(cloudinaryResult)) return Result<Unit>
                 .Failure("Failed to delete photo from cloudinary.");
 
-        user.Photos.Remove(photo);
+        unitOfWork.PhotosRepository.DeletePhoto(user, photo);
 
         var result = await unitOfWork.SaveChangesAsync();
 
