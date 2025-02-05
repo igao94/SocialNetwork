@@ -8,4 +8,5 @@ public class Post
     public AppUser AppUser { get; set; } = null!;
     public string AppUserId { get; set; } = null!;
     public ICollection<PostPhoto> PostPhotos { get; set; } = [];
+    public ICollection<AppUserPostLike> Likes { get; set; } = [];
 }

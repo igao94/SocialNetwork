@@ -1,4 +1,5 @@
 ﻿using Application.Helpers;
+using Application.Likes.DTOs;
 using Application.Photos.DTOs;
 using Application.Posts.DTOs;
 using Application.Posts.UpdatePost;
@@ -25,10 +26,15 @@ public class MappingProfile : Profile
         CreateMap<Post, PostDto>()
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
             .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.AppUser.Photos
-                .FirstOrDefault(p => p.IsMain)!.Url));
+                .FirstOrDefault(p => p.IsMain)!.Url))
+            .ForMember(dest => dest.LikesCount, opt => opt.MapFrom(src => src.Likes.Count));
 
         CreateMap<PostPhoto, PostPhotoDto>();
 
         CreateMap<UpdatePostCommand, Post>();
+
+        CreateMap<AppUser, UserLikeDto>()
+            .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.Photos
+                .FirstOrDefault(p => p.IsMain)!.Url));
     }
 }

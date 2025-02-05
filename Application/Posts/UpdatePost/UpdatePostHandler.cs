@@ -17,7 +17,7 @@ public class UpdatePostHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return null;
 
-        var post = unitOfWork.PostsRepository.GetPostById(user, request.PostId);
+        var post = unitOfWork.PostsRepository.GetPostForUserById(user, request.PostId);
 
         if (post is null) return null;
 

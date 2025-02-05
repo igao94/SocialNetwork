@@ -16,9 +16,13 @@ public class DeletePostHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return null;
 
-        var post = unitOfWork.PostsRepository.GetPostById(user, request.PostId);
+        var post = unitOfWork.PostsRepository.GetPostForUserById(user, request.PostId);
 
         if (post is null) return null;
+
+        var likes = await unitOfWork.LikesRepository.GetLikesByPostIdAsync(post.PostId);
+
+        foreach (var like in likes) unitOfWork.LikesRepository.RemoveLike(like);
 
         foreach (var photo in post.PostPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
 

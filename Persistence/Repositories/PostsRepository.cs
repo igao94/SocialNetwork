@@ -10,7 +10,10 @@ public class PostsRepository(DataContext context) : IPostsRepository
 
     public void AddPhotoToPost(Post post, PostPhoto photo) => post.PostPhotos.Add(photo);
 
-    public Post? GetPostById(AppUser user, int postId) => user.Posts.FirstOrDefault(p => p.PostId == postId);
+    public Post? GetPostForUserById(AppUser user, int postId)
+    {
+        return user.Posts.FirstOrDefault(p => p.PostId == postId);
+    }
 
     public void DeletePost(AppUser user, Post post) => user.Posts.Remove(post);
 
@@ -27,4 +30,6 @@ public class PostsRepository(DataContext context) : IPostsRepository
 
         return query;
     }
+
+    public async Task<Post?> GetPostByIdAsync(int postId) => await context.Posts.FindAsync(postId);
 }

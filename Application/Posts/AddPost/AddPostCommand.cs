@@ -5,4 +5,4 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Posts.AddPost;
 
-public record AddPostCommand(List<IFormFile> Files, string Content) : IRequest<Result<PostDto>>;
+public record AddPostCommand(List<IFormFile>? Files, string Content) : IRequest<Result<PostDto>>;

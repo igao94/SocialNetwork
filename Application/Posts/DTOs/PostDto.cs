@@ -6,6 +6,7 @@ public class PostDto
     public string Username {  get; set; } = string.Empty;
     public string? ProfilePictureUrl {  get; set; }
     public string Content { get; set; } = string.Empty;
+    public int LikesCount {  get; set; }
     public DateTime CreationDate { get; set; }
     public ICollection<PostPhotoDto> PostPhotos { get; set; } = [];
 }

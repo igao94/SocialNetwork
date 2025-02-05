@@ -9,4 +9,5 @@ public class AppUser : IdentityUser
     public DateOnly DateOfBirth { get; set; }
     public ICollection<Photo> Photos { get; set; } = [];
     public ICollection<Post> Posts { get; set; } = [];
+    public ICollection<AppUserPostLike> LikedPosts { get; set; } = [];
 }
