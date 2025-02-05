@@ -9,4 +9,5 @@ public class Post
     public string AppUserId { get; set; } = null!;
     public ICollection<PostPhoto> PostPhotos { get; set; } = [];
     public ICollection<AppUserPostLike> Likes { get; set; } = [];
+    public ICollection<AppUserPostComment> Comments { get; set; } = [];
 }

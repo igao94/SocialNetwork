@@ -10,4 +10,5 @@ public class AppUser : IdentityUser
     public ICollection<Photo> Photos { get; set; } = [];
     public ICollection<Post> Posts { get; set; } = [];
     public ICollection<AppUserPostLike> LikedPosts { get; set; } = [];
+    public ICollection<AppUserPostComment> Comments { get; set; } = [];
 }

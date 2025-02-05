@@ -16,6 +16,15 @@ public class LikesRepository(DataContext context) : ILikesRepository
 
     public void RemoveLike(AppUserPostLike like) => context.AppUserPostLikes.Remove(like);
 
+    public void RemoveLikes(List<AppUserPostLike> likes) => context.AppUserPostLikes.RemoveRange(likes);
+
+    public async Task<List<AppUserPostLike>> GetLikesByPostIdsAsync(List<int> postIds)
+    {
+        return await context.AppUserPostLikes
+            .Where(l => postIds.Contains(l.PostId))
+            .ToListAsync();
+    }
+
     public async Task<List<AppUserPostLike>> GetLikesByPostIdAsync(int postId)
     {
         return await context.AppUserPostLikes

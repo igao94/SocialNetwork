@@ -21,18 +21,27 @@ public class DeleteUserHandler(IUnitOfWork unitOfWork,
             await photosService.DeletePhotoAsync(photo.PublicId);
         }
 
-        var likes = await unitOfWork.LikesRepository.GetLikesByUserIdAsync(user.Id);
+        var userLikes = await unitOfWork.LikesRepository.GetLikesByUserIdAsync(user.Id);
 
-        foreach (var like in likes) unitOfWork.LikesRepository.RemoveLike(like);
+        unitOfWork.LikesRepository.RemoveLikes(userLikes);
 
-        foreach (var post in user.Posts)
-        {
-            var postLikes = await unitOfWork.LikesRepository.GetLikesByPostIdAsync(post.PostId);
+        var userComments = await unitOfWork.CommentsRepository.GetCommentsByUserIdAsync(user.Id);
 
-            foreach (var like in postLikes) unitOfWork.LikesRepository.RemoveLike(like);
+        unitOfWork.CommentsRepository.RemoveComments(userComments);
 
-            foreach (var photo in post.PostPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
-        }
+        var postIds = unitOfWork.PostsRepository.GetPostIds(user);
+
+        var postComments = await unitOfWork.CommentsRepository.GetCommentsByPostIdsAsync(postIds);
+
+        unitOfWork.CommentsRepository.RemoveComments(postComments);
+
+        var postLikes = await unitOfWork.LikesRepository.GetLikesByPostIdsAsync(postIds);
+
+        unitOfWork.LikesRepository.RemoveLikes(postLikes);
+
+        var postPhotos = unitOfWork.PostsRepository.GetPostPhotos(user);
+
+        foreach (var photo in postPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
 
         unitOfWork.UsersRepository.DeleteUser(user);
 

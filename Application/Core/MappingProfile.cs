@@ -1,4 +1,5 @@
-﻿using Application.Helpers;
+﻿using Application.Comments.DTOs;
+using Application.Helpers;
 using Application.Likes.DTOs;
 using Application.Photos.DTOs;
 using Application.Posts.DTOs;
@@ -35,6 +36,13 @@ public class MappingProfile : Profile
 
         CreateMap<AppUser, UserLikeDto>()
             .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.Photos
+                .FirstOrDefault(p => p.IsMain)!.Url));
+
+        CreateMap<AppUserPostComment, CommentDto>()
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.AppUser.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.AppUser.LastName))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
+            .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.AppUser.Photos
                 .FirstOrDefault(p => p.IsMain)!.Url));
     }
 }

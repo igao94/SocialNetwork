@@ -72,10 +72,12 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUsersRepository, UsersRepository>();
 
         services.AddScoped<IPhotosRepository, PhotosRepository>();
-        
+
         services.AddScoped<IPostsRepository, PostsRepository>();
 
         services.AddScoped<ILikesRepository, LikesRepository>();
+
+        services.AddScoped<ICommentsRepository, CommentsRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

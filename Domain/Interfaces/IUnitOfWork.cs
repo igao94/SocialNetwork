@@ -7,5 +7,6 @@ public interface IUnitOfWork
     IPhotosRepository PhotosRepository { get; }
     IPostsRepository PostsRepository { get; }
     ILikesRepository LikesRepository { get; }
+    ICommentsRepository CommentsRepository { get; }
     Task<bool> SaveChangesAsync();
 }

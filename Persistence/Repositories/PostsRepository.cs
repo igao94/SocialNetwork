@@ -32,4 +32,8 @@ public class PostsRepository(DataContext context) : IPostsRepository
     }
 
     public async Task<Post?> GetPostByIdAsync(int postId) => await context.Posts.FindAsync(postId);
+
+    public List<int> GetPostIds(AppUser user) => user.Posts.Select(p => p.PostId).ToList();
+
+    public List<PostPhoto> GetPostPhotos(AppUser user) => user.Posts.SelectMany(p => p.PostPhotos).ToList(); 
 }
