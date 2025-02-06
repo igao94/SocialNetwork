@@ -8,5 +8,6 @@ public interface IUnitOfWork
     IPostsRepository PostsRepository { get; }
     ILikesRepository LikesRepository { get; }
     ICommentsRepository CommentsRepository { get; }
+    IFollowingsRepository FollowingsRepository { get; }
     Task<bool> SaveChangesAsync();
 }

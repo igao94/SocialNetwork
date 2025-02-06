@@ -9,8 +9,8 @@ public interface IUsersRepository
     Task<AppUser?> GetUserByUsernameAsync(string username);
     void DeleteUser(AppUser user);
     Task<AppUser?> GetUserWithPhotosByUsernameAsync(string username);
-    Task<AppUser?> GetUserWithPhotosAndPostsByUsernameAsync(string username);
-    Task<AppUser?> GetUserWithPhotosAndPostsAndLikesByUsernameAsync(string username);
+    Task<AppUser?> GetUserWithPostsByUsernameAsync(string username);
+    Task<AppUser?> GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(string username);
     string? GetMainPhoto(AppUser user);
     Task<AppUser?> GetUserByIdAsync(string id);
 }

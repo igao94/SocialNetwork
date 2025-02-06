@@ -12,6 +12,8 @@ public class UserDto
     public string? PhotoUrl { get; set; }
     public DateOnly DateOfBirth { get; set; }
     public int Age { get; set; }
+    public int FollowersCount { get; set; }
+    public int FollowingCount { get; set; }
     public ICollection<PhotoDto> Photos { get; set; } = [];
     public ICollection<PostDto> Posts { get; set; } = [];
 }

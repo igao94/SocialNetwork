@@ -9,6 +9,7 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     public DbSet<Post> Posts { get; set; }
     public DbSet<AppUserPostLike> AppUserPostLikes { get; set; }
     public DbSet<AppUserPostComment> AppUserPostComment { get; set; }
+    public DbSet<AppUserFollowing> AppUserFollowings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -38,12 +39,26 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
             .HasOne(c => c.AppUser)
             .WithMany(u => u.Comments)
             .HasForeignKey(c => c.AppUserId)
-            .OnDelete(DeleteBehavior.NoAction);        
-        
+            .OnDelete(DeleteBehavior.NoAction);
+
         builder.Entity<AppUserPostComment>()
             .HasOne(c => c.Post)
             .WithMany(p => p.Comments)
             .HasForeignKey(c => c.PostId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<AppUserFollowing>().HasKey(uf => new { uf.ObserverId, uf.TargetId });
+
+        builder.Entity<AppUserFollowing>()
+            .HasOne(uf => uf.Observer)
+            .WithMany(u => u.Following)
+            .HasForeignKey(uf => uf.ObserverId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<AppUserFollowing>()
+            .HasOne(uf => uf.Target)
+            .WithMany(u => u.Followers)
+            .HasForeignKey(uf => uf.TargetId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

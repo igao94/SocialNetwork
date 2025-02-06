@@ -79,6 +79,8 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ICommentsRepository, CommentsRepository>();
 
+        services.AddScoped<IFollowingsRepository, FollowingsRepository>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddAutoMapper(typeof(MappingProfile).Assembly);

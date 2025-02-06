@@ -17,11 +17,11 @@ public class ToggleLikeHandler(IUnitOfWork unitOfWork,
 
         if (post is null) return null;
 
-        var existingLike = await unitOfWork.LikesRepository.GetLikeByIdAsync(userId, post.PostId);
+        var like = await unitOfWork.LikesRepository.GetLikeByIdAsync(userId, post.PostId);
 
-        if (existingLike is null)
+        if (like is null)
         {
-            var like = new AppUserPostLike
+            like = new AppUserPostLike
             {
                 AppUserId = userId,
                 PostId = post.PostId
@@ -31,7 +31,7 @@ public class ToggleLikeHandler(IUnitOfWork unitOfWork,
         }
         else
         {
-            unitOfWork.LikesRepository.RemoveLike(existingLike);
+            unitOfWork.LikesRepository.RemoveLike(like);
         }
 
         var result = await unitOfWork.SaveChangesAsync();

@@ -13,7 +13,7 @@ public class UpdatePostHandler(IUnitOfWork unitOfWork,
     public async Task<Result<Unit>?> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosAndPostsByUsernameAsync(userAccessor.GetCurrentUserUsername());
+            .GetUserWithPostsByUsernameAsync(userAccessor.GetCurrentUserUsername());
 
         if (user is null) return null;
 

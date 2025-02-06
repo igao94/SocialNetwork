@@ -41,22 +41,19 @@ public class UsersRepository(DataContext context) : IUsersRepository
             .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 
-    public async Task<AppUser?> GetUserWithPhotosAndPostsByUsernameAsync(string username)
+    public async Task<AppUser?> GetUserWithPostsByUsernameAsync(string username)
     {
         return await context.Users
-            .Include(u => u.Photos)
             .Include(u => u.Posts)
-                .ThenInclude(p => p.PostPhotos)
             .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 
-    public async Task<AppUser?> GetUserWithPhotosAndPostsAndLikesByUsernameAsync(string username)
+    public async Task<AppUser?> GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(string username)
     {
         return await context.Users
             .Include(u => u.Photos)
             .Include(u => u.Posts)
-                .ThenInclude(p => p.PostPhotos)
-            .Include(u => u.LikedPosts)
+                .ThenInclude(u => u.PostPhotos)
             .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 

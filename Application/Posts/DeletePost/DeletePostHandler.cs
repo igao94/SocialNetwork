@@ -12,7 +12,7 @@ public class DeletePostHandler(IUnitOfWork unitOfWork,
     public async Task<Result<Unit>?> Handle(DeletePostCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosAndPostsByUsernameAsync(userAccessor.GetCurrentUserUsername());
+            .GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
 
         if (user is null) return null;
 

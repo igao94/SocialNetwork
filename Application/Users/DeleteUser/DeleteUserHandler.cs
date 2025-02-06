@@ -12,7 +12,7 @@ public class DeleteUserHandler(IUnitOfWork unitOfWork,
     public async Task<Result<Unit>?> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosAndPostsAndLikesByUsernameAsync(userAccessor.GetCurrentUserUsername());
+            .GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
 
         if (user is null) return null;
 
@@ -20,6 +20,8 @@ public class DeleteUserHandler(IUnitOfWork unitOfWork,
         {
             await photosService.DeletePhotoAsync(photo.PublicId);
         }
+
+        await unitOfWork.FollowingsRepository.RemoveAllFollowsForUserAsync(user.Id);
 
         var userLikes = await unitOfWork.LikesRepository.GetLikesByUserIdAsync(user.Id);
 
