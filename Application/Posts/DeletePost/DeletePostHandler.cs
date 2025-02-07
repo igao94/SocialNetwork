@@ -20,13 +20,11 @@ public class DeletePostHandler(IUnitOfWork unitOfWork,
 
         if (post is null) return null;
 
-        var likes = await unitOfWork.LikesRepository.GetLikesByPostIdAsync(post.PostId);
+        await unitOfWork.ReportsRepository.DeletePostReportsAsync(post.PostId);
 
-        unitOfWork.LikesRepository.RemoveLikes(likes);
+        await unitOfWork.LikesRepository.RemovePostLikesAsync(post.PostId);
 
-        var comments = await unitOfWork.CommentsRepository.GetCommentsByPostIdAsync(post.PostId);
-
-        unitOfWork.CommentsRepository.RemoveComments(comments);
+        await unitOfWork.CommentsRepository.DeleteCommentsByPostIdAsync(post.PostId);
 
         foreach (var photo in post.PostPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
 

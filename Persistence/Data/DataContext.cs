@@ -11,6 +11,7 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     public DbSet<AppUserPostComment> AppUserPostComment { get; set; }
     public DbSet<AppUserFollowing> AppUserFollowings { get; set; }
     public DbSet<UserReport> UserReports { get; set; }
+    public DbSet<PostReport> PostReports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -62,18 +63,32 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
             .HasForeignKey(uf => uf.TargetId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.Entity<UserReport>().HasKey(k => new { k.ReporterId, k.ReportedUserId });
+        builder.Entity<UserReport>().HasKey(ur => new { ur.ReporterId, ur.ReportedUserId });
 
         builder.Entity<UserReport>()
-            .HasOne(ru => ru.Reporter)
-            .WithMany()
-            .HasForeignKey(ru => ru.ReporterId)
+            .HasOne(ur => ur.Reporter)
+            .WithMany(u => u.UserReports)
+            .HasForeignKey(ur => ur.ReporterId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<UserReport>()
-            .HasOne(ru => ru.ReportredUser)
+            .HasOne(ur => ur.ReportedUser)
             .WithMany()
-            .HasForeignKey(ru => ru.ReportedUserId)
+            .HasForeignKey(ur => ur.ReportedUserId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<PostReport>().HasKey(pp => new { pp.ReporterId, pp.ReportedPostId });
+
+        builder.Entity<PostReport>()
+            .HasOne(pp => pp.Reporter)
+            .WithMany(u => u.PostReports)
+            .HasForeignKey(pp => pp.ReporterId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<PostReport>()
+            .HasOne(pp => pp.ReportedPost)
+            .WithMany(u => u.PostReports)
+            .HasForeignKey(pp => pp.ReportedPostId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

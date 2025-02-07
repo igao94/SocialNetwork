@@ -10,4 +10,5 @@ public class Post
     public ICollection<PostPhoto> PostPhotos { get; set; } = [];
     public ICollection<AppUserPostLike> Likes { get; set; } = [];
     public ICollection<AppUserPostComment> Comments { get; set; } = [];
+    public ICollection<PostReport> PostReports { get; set; } = [];
 }

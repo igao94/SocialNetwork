@@ -241,6 +241,28 @@ namespace Persistence.Migrations
                     b.ToTable("PostPhotos");
                 });
 
+            modelBuilder.Entity("Domain.Entities.PostReport", b =>
+                {
+                    b.Property<string>("ReporterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ReportedPostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReporterId", "ReportedPostId");
+
+                    b.HasIndex("ReportedPostId");
+
+                    b.ToTable("PostReports");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserReport", b =>
                 {
                     b.Property<string>("ReporterId")
@@ -486,23 +508,42 @@ namespace Persistence.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("Domain.Entities.PostReport", b =>
+                {
+                    b.HasOne("Domain.Entities.Post", "ReportedPost")
+                        .WithMany("PostReports")
+                        .HasForeignKey("ReportedPostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "Reporter")
+                        .WithMany("PostReports")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ReportedPost");
+
+                    b.Navigation("Reporter");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserReport", b =>
                 {
-                    b.HasOne("Domain.Entities.AppUser", "ReportredUser")
+                    b.HasOne("Domain.Entities.AppUser", "ReportedUser")
                         .WithMany()
                         .HasForeignKey("ReportedUserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "Reporter")
-                        .WithMany()
+                        .WithMany("UserReports")
                         .HasForeignKey("ReporterId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Reporter");
+                    b.Navigation("ReportedUser");
 
-                    b.Navigation("ReportredUser");
+                    b.Navigation("Reporter");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -568,7 +609,11 @@ namespace Persistence.Migrations
 
                     b.Navigation("Photos");
 
+                    b.Navigation("PostReports");
+
                     b.Navigation("Posts");
+
+                    b.Navigation("UserReports");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -578,6 +623,8 @@ namespace Persistence.Migrations
                     b.Navigation("Likes");
 
                     b.Navigation("PostPhotos");
+
+                    b.Navigation("PostReports");
                 });
 #pragma warning restore 612, 618
         }

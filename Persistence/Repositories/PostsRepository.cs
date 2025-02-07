@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 
 namespace Persistence.Repositories;
@@ -32,6 +33,13 @@ public class PostsRepository(DataContext context) : IPostsRepository
     }
 
     public async Task<Post?> GetPostByIdAsync(int postId) => await context.Posts.FindAsync(postId);
+
+    public async Task<Post?> GetPostWithUsersByIdAsync(int postId)
+    {
+        return await context.Posts
+            .Include(u => u.AppUser)
+            .FirstOrDefaultAsync(u => u.PostId == postId);
+    }
 
     public List<int> GetPostIds(AppUser user) => user.Posts.Select(p => p.PostId).ToList();
 

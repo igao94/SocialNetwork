@@ -16,27 +16,31 @@ public class LikesRepository(DataContext context) : ILikesRepository
 
     public void RemoveLike(AppUserPostLike like) => context.AppUserPostLikes.Remove(like);
 
-    public void RemoveLikes(List<AppUserPostLike> likes) => context.AppUserPostLikes.RemoveRange(likes);
-
-    public async Task<List<AppUserPostLike>> GetLikesByPostIdsAsync(List<int> postIds)
+    public async Task RemovePostsLikesAsync(List<int> postIds)
     {
-        return await context.AppUserPostLikes
+        var likes = await context.AppUserPostLikes
             .Where(l => postIds.Contains(l.PostId))
             .ToListAsync();
+
+        context.AppUserPostLikes.RemoveRange(likes);
     }
 
-    public async Task<List<AppUserPostLike>> GetLikesByPostIdAsync(int postId)
+    public async Task RemovePostLikesAsync(int postId)
     {
-        return await context.AppUserPostLikes
+        var likes = await context.AppUserPostLikes
             .Where(l => l.PostId == postId)
             .ToListAsync();
+
+        context.AppUserPostLikes.RemoveRange(likes);
     }
 
-    public async Task<List<AppUserPostLike>> GetLikesByUserIdAsync(string appUserId)
+    public async Task RemoveUserLikesAsync(string appUserId)
     {
-        return await context.AppUserPostLikes
+        var likes = await context.AppUserPostLikes
             .Where(l => l.AppUserId == appUserId)
             .ToListAsync();
+
+        context.AppUserPostLikes.RemoveRange(likes);
     }
 
     public async Task<List<AppUser>> GetUsersWhoLikedPostAsync(int postId)

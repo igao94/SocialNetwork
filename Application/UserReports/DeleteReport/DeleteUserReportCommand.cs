@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.UserReports.DeleteReport;
 
-public record DeleteReportCommand(string Username) : IRequest<Result<Unit>>;
+public record DeleteUserReportCommand(string Username) : IRequest<Result<Unit>>;

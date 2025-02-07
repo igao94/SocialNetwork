@@ -6,10 +6,10 @@ using MediatR;
 
 namespace Application.UserReports.AddReport;
 
-public class AddReportHandler(IUnitOfWork unitOfWork,
-    IUserAccessor userAccessor) : IRequestHandler<AddReportCommand, Result<Unit>?>
+public class AddUserReportHandler(IUnitOfWork unitOfWork,
+    IUserAccessor userAccessor) : IRequestHandler<AddUserReportCommand, Result<Unit>?>
 {
-    public async Task<Result<Unit>?> Handle(AddReportCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>?> Handle(AddUserReportCommand request, CancellationToken cancellationToken)
     {
         var reporter = await unitOfWork.UsersRepository.GetUserByIdAsync(userAccessor.GetCurrentUserId());
 
@@ -21,7 +21,7 @@ public class AddReportHandler(IUnitOfWork unitOfWork,
 
         if (userToReport is null) return null;
 
-        var existingReport = await unitOfWork.UserReportsRepository
+        var existingReport = await unitOfWork.ReportsRepository
             .GetUserReportByIdAsync(reporter.Id, userToReport.Id);
 
         if (existingReport is not null) return Result<Unit>.Failure("You have already reported this user.");
@@ -30,12 +30,12 @@ public class AddReportHandler(IUnitOfWork unitOfWork,
         {
             Reporter = reporter,
             ReporterId = reporter.Id,
-            ReportredUser = userToReport,
+            ReportedUser = userToReport,
             ReportedUserId = userToReport.Id,
             Reason = request.Reason
         };
 
-        unitOfWork.UserReportsRepository.AddReport(report);
+        unitOfWork.ReportsRepository.AddUserReport(report);
 
         var result = await unitOfWork.SaveChangesAsync();
 

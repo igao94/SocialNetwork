@@ -2,6 +2,7 @@
 using Application.Helpers;
 using Application.Likes.DTOs;
 using Application.Photos.DTOs;
+using Application.PostReports.DTOs;
 using Application.Posts.DTOs;
 using Application.Posts.UpdatePost;
 using Application.UserReports.DTOs;
@@ -48,8 +49,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.AppUser.Photos
                 .FirstOrDefault(p => p.IsMain)!.Url));
 
-        CreateMap<UserReport, UserReportsDto>()
+        CreateMap<UserReport, UserReportDto>()
             .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
-            .ForMember(dest => dest.ReportedUserUsername, opt => opt.MapFrom(src => src.ReportredUser.UserName));
+            .ForMember(dest => dest.ReportedUserUsername, opt => opt.MapFrom(src => src.ReportedUser.UserName));
+
+        CreateMap<PostReport, PostReportDto>()
+            .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
+            .ForMember(dest => dest.ReportedPostUserUsername, opt => 
+                opt.MapFrom(src => src.ReportedPost.AppUser.UserName));
     }
 }

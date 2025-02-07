@@ -1,11 +1,12 @@
 ﻿namespace Domain.Entities;
 
-public class UserReport
+public class PostReport
 {
     public string ReporterId { get; set; } = null!;
     public AppUser Reporter { get; set; } = null!;
-    public string ReportedUserId { get; set; } = null!;
-    public AppUser ReportedUser { get; set; } = null!;
-    public string Reason { get; set; } = null!;
+    public int ReportedPostId { get; set; }
+    public Post ReportedPost { get; set; } = null!;
+    public string Reason { get; set; } = string.Empty;
     public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 }
+    

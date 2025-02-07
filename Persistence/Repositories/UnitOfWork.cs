@@ -11,7 +11,7 @@ public class UnitOfWork(DataContext context,
     ILikesRepository likesRepository,
     ICommentsRepository commentsRepository,
     IFollowingsRepository followingsRepository,
-    IUserReportsRepository userReportsRepository) : IUnitOfWork
+    IReportsRepository reportsRepository) : IUnitOfWork
 {
     public IAccountsRepository AccountRepository => accountsRepository;
 
@@ -27,7 +27,7 @@ public class UnitOfWork(DataContext context,
 
     public IFollowingsRepository FollowingsRepository => followingsRepository;
 
-    public IUserReportsRepository UserReportsRepository => userReportsRepository;
+    public IReportsRepository ReportsRepository => reportsRepository;
 
     public async Task<bool> SaveChangesAsync() => await context.SaveChangesAsync() > 0;
 }

@@ -7,9 +7,8 @@ public interface ILikesRepository
     Task<AppUserPostLike?> GetLikeByIdAsync(string appUserId, int postId);
     void AddLike(AppUserPostLike like);
     void RemoveLike(AppUserPostLike like);
-    Task<List<AppUserPostLike>> GetLikesByPostIdAsync(int postId);
-    Task<List<AppUserPostLike>> GetLikesByPostIdsAsync(List<int> postIds);
-    Task<List<AppUserPostLike>> GetLikesByUserIdAsync(string appUserId);
+    Task RemovePostLikesAsync(int postId);
+    Task RemovePostsLikesAsync(List<int> postIds);
     Task<List<AppUser>> GetUsersWhoLikedPostAsync(int postId);
-    void RemoveLikes(List<AppUserPostLike> likes);
+    Task RemoveUserLikesAsync(string appUserId);
 }

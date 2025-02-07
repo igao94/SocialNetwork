@@ -11,30 +11,31 @@ public class CommentsRepository(DataContext context) : ICommentsRepository
 
     public void RemoveComment(AppUserPostComment comment) => context.AppUserPostComment.Remove(comment);
 
-    public void RemoveComments(List<AppUserPostComment> comments)
+    public async Task DeleteCommentsByPostIdsAsync(List<int> postIds)
     {
+        var comments = await context.AppUserPostComment
+            .Where(c => postIds.Contains(c.PostId))
+            .ToListAsync();
+
         context.AppUserPostComment.RemoveRange(comments);
     }
 
-    public async Task<List<AppUserPostComment>> GetCommentsByPostIdsAsync(List<int> postIds)
+    public async Task DeleteCommentsByPostIdAsync(int postId)
     {
-        return await context.AppUserPostComment
-            .Where(c => postIds.Contains(c.PostId))
-            .ToListAsync();
-    }
-
-    public async Task<List<AppUserPostComment>> GetCommentsByPostIdAsync(int postId)
-    {
-        return await context.AppUserPostComment
+        var comments = await context.AppUserPostComment
             .Where(c => c.PostId == postId)
             .ToListAsync();
+
+        context.AppUserPostComment.RemoveRange(comments);
     }
 
-    public async Task<List<AppUserPostComment>> GetCommentsByUserIdAsync(string appUserId)
+    public async Task DeleteCommentsByUserIdAsync(string appUserId)
     {
-        return await context.AppUserPostComment
+        var comments = await context.AppUserPostComment
             .Where(c => c.AppUserId == appUserId)
             .ToListAsync();
+
+        context.AppUserPostComment.RemoveRange(comments);
     }
 
     public async Task<AppUserPostComment?> GetCommentByUserIdAsync(string appUserId, int commentId)

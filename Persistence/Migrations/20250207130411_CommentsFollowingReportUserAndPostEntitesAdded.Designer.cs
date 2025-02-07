@@ -12,8 +12,8 @@ using Persistence.Data;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250205112830_AppUserPostCommentEntityAdded")]
-    partial class AppUserPostCommentEntityAdded
+    [Migration("20250207130411_CommentsFollowingReportUserAndPostEntitesAdded")]
+    partial class CommentsFollowingReportUserAndPostEntitesAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,6 +99,21 @@ namespace Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.AppUserFollowing", b =>
+                {
+                    b.Property<string>("ObserverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TargetId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ObserverId", "TargetId");
+
+                    b.HasIndex("TargetId");
+
+                    b.ToTable("AppUserFollowings");
                 });
 
             modelBuilder.Entity("Domain.Entities.AppUserPostComment", b =>
@@ -227,6 +242,50 @@ namespace Persistence.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostPhotos");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PostReport", b =>
+                {
+                    b.Property<string>("ReporterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ReportedPostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReporterId", "ReportedPostId");
+
+                    b.HasIndex("ReportedPostId");
+
+                    b.ToTable("PostReports");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserReport", b =>
+                {
+                    b.Property<string>("ReporterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReportedUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReporterId", "ReportedUserId");
+
+                    b.HasIndex("ReportedUserId");
+
+                    b.ToTable("UserReports");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -362,6 +421,25 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.AppUserFollowing", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", "Observer")
+                        .WithMany("Following")
+                        .HasForeignKey("ObserverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "Target")
+                        .WithMany("Followers")
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Observer");
+
+                    b.Navigation("Target");
+                });
+
             modelBuilder.Entity("Domain.Entities.AppUserPostComment", b =>
                 {
                     b.HasOne("Domain.Entities.AppUser", "AppUser")
@@ -433,6 +511,44 @@ namespace Persistence.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("Domain.Entities.PostReport", b =>
+                {
+                    b.HasOne("Domain.Entities.Post", "ReportedPost")
+                        .WithMany("PostReports")
+                        .HasForeignKey("ReportedPostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "Reporter")
+                        .WithMany("PostReports")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ReportedPost");
+
+                    b.Navigation("Reporter");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserReport", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", "ReportedUser")
+                        .WithMany()
+                        .HasForeignKey("ReportedUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.AppUser", "Reporter")
+                        .WithMany("UserReports")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ReportedUser");
+
+                    b.Navigation("Reporter");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -488,11 +604,19 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
+
                     b.Navigation("LikedPosts");
 
                     b.Navigation("Photos");
 
+                    b.Navigation("PostReports");
+
                     b.Navigation("Posts");
+
+                    b.Navigation("UserReports");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -502,6 +626,8 @@ namespace Persistence.Migrations
                     b.Navigation("Likes");
 
                     b.Navigation("PostPhotos");
+
+                    b.Navigation("PostReports");
                 });
 #pragma warning restore 612, 618
         }

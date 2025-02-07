@@ -3,24 +3,24 @@ using Application.Interfaces;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.UserReports.DeleteReport;
+namespace Application.PostReports.DeleteReport;
 
 public class DeleteReportHandler(IUnitOfWork unitOfWork,
     IUserAccessor userAccessor) : IRequestHandler<DeleteReportCommand, Result<Unit>?>
 {
     public async Task<Result<Unit>?> Handle(DeleteReportCommand request, CancellationToken cancellationToken)
     {
-        var reporterId = userAccessor.GetCurrentUserId();
+        var userId = userAccessor.GetCurrentUserId();
 
-        var reportedUser = await unitOfWork.UsersRepository.GetUserByUsernameAsync(request.Username);
+        var post = await unitOfWork.PostsRepository.GetPostByIdAsync(request.PostId);
 
-        if (reportedUser is null) return null;
+        if (post is null) return null;
 
-        var report = await unitOfWork.UserReportsRepository.GetUserReportByIdAsync(reporterId, reportedUser.Id);
+        var report = await unitOfWork.ReportsRepository.GetPostReportByIdAsync(userId, post.PostId);
 
         if (report is null) return null;
 
-        unitOfWork.UserReportsRepository.DeleteReport(report);
+        unitOfWork.ReportsRepository.DeletePostReport(report);
 
         var result = await unitOfWork.SaveChangesAsync();
 

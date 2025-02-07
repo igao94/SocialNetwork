@@ -13,4 +13,5 @@ public interface IPostsRepository
     Task<Post?> GetPostByIdAsync(int postId);
     List<int> GetPostIds(AppUser user);
     List<PostPhoto> GetPostPhotos(AppUser user);
+    Task<Post?> GetPostWithUsersByIdAsync(int postId);
 }

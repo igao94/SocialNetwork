@@ -9,6 +9,6 @@ public interface IUnitOfWork
     ILikesRepository LikesRepository { get; }
     ICommentsRepository CommentsRepository { get; }
     IFollowingsRepository FollowingsRepository { get; }
-    IUserReportsRepository UserReportsRepository { get; }
+    IReportsRepository ReportsRepository { get; }
     Task<bool> SaveChangesAsync();
 }
