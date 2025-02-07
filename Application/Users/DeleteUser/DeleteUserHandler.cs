@@ -23,6 +23,8 @@ public class DeleteUserHandler(IUnitOfWork unitOfWork,
 
         await unitOfWork.FollowingsRepository.RemoveAllFollowsForUserAsync(user.Id);
 
+        await unitOfWork.UserReportsRepository.DeleteAllReportsAsync(user.Id);
+
         var userLikes = await unitOfWork.LikesRepository.GetLikesByUserIdAsync(user.Id);
 
         unitOfWork.LikesRepository.RemoveLikes(userLikes);

@@ -7,10 +7,10 @@ namespace API.Controllers;
 
 public class CommentsController(IMediator mediator) : BaseApiController
 {
-    [HttpPost("{postId}")]
-    public async Task<IActionResult> AddComment(int postId, string content)
+    [HttpPost("add-comment")]
+    public async Task<IActionResult> AddComment(AddCommentCommand command)
     {
-        return HandleResult(await mediator.Send(new AddCommentCommand(postId, content)));
+        return HandleResult(await mediator.Send(command));
     }
 
     [HttpDelete("{commentId}")]

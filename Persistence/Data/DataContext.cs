@@ -10,6 +10,7 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     public DbSet<AppUserPostLike> AppUserPostLikes { get; set; }
     public DbSet<AppUserPostComment> AppUserPostComment { get; set; }
     public DbSet<AppUserFollowing> AppUserFollowings { get; set; }
+    public DbSet<UserReport> UserReports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -59,6 +60,20 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
             .HasOne(uf => uf.Target)
             .WithMany(u => u.Followers)
             .HasForeignKey(uf => uf.TargetId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<UserReport>().HasKey(k => new { k.ReporterId, k.ReportedUserId });
+
+        builder.Entity<UserReport>()
+            .HasOne(ru => ru.Reporter)
+            .WithMany()
+            .HasForeignKey(ru => ru.ReporterId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<UserReport>()
+            .HasOne(ru => ru.ReportredUser)
+            .WithMany()
+            .HasForeignKey(ru => ru.ReportedUserId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

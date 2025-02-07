@@ -4,6 +4,7 @@ using Application.Likes.DTOs;
 using Application.Photos.DTOs;
 using Application.Posts.DTOs;
 using Application.Posts.UpdatePost;
+using Application.UserReports.DTOs;
 using Application.Users.DTOs;
 using Application.Users.UpdateUser;
 using AutoMapper;
@@ -46,5 +47,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
             .ForMember(dest => dest.ProfilePictureUrl, opt => opt.MapFrom(src => src.AppUser.Photos
                 .FirstOrDefault(p => p.IsMain)!.Url));
+
+        CreateMap<UserReport, UserReportsDto>()
+            .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
+            .ForMember(dest => dest.ReportedUserUsername, opt => opt.MapFrom(src => src.ReportredUser.UserName));
     }
 }

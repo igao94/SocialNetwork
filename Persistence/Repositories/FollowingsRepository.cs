@@ -49,9 +49,10 @@ public class FollowingsRepository(DataContext context) : IFollowingsRepository
     public IQueryable<Post> GetPostsFromFollowedUsersQuery(string appUserId)
     {
         IQueryable<Post> query = context.Posts
+            .OrderByDescending(p => p.CreationDate)
             .Where(p => context.AppUserFollowings
-                .Where(p => p.ObserverId == appUserId)
-                .Select(p => p.TargetId)
+                .Where(uf => uf.ObserverId == appUserId)
+                .Select(uf => uf.TargetId)
                 .Contains(p.AppUserId));
 
         return query;

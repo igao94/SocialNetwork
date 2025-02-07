@@ -81,6 +81,8 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IFollowingsRepository, FollowingsRepository>();
 
+        services.AddScoped<IUserReportsRepository, UserReportsRepository>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
