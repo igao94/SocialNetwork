@@ -34,15 +34,6 @@ public class ReportsRepository(DataContext context) : IReportsRepository
 
     public void DeletePostReport(PostReport postReport) => context.PostReports.Remove(postReport);
 
-    public async Task DeleteAllPostsReportsAsync(List<int> postIds)
-    {
-        var postReports = await context.PostReports
-            .Where(pr => postIds.Contains(pr.ReportedPostId))
-            .ToListAsync();
-
-        context.PostReports.RemoveRange(postReports);
-    }
-
     public async Task DeleteAllPostsReportsForUserAsync(string appUserId)
     {
         var postReports = await context.PostReports

@@ -11,7 +11,6 @@ public interface IReportsRepository
     Task<PostReport?> GetPostReportByIdAsync(string reporterId, int postId);
     void AddPostReport(PostReport postReport);
     void DeletePostReport(PostReport postReport);
-    Task DeleteAllPostsReportsAsync(List<int> postIds);
     Task DeletePostReportsAsync(int postId);
     Task<List<UserReport>> GetUsersReportsForUserAsync(string appUserId);
     Task<List<PostReport>> GetPostsReportsForUserAsync(string appUserId);

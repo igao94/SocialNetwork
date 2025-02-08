@@ -16,7 +16,9 @@ public class PostsRepository(DataContext context) : IPostsRepository
         return user.Posts.FirstOrDefault(p => p.PostId == postId);
     }
 
-    public void DeletePost(AppUser user, Post post) => user.Posts.Remove(post);
+    public void DeletePostForUser(AppUser user, Post post) => user.Posts.Remove(post);
+
+    public void DeletePost(Post post) => context.Posts.Remove(post);
 
     public IQueryable<Post> GetAllPostsQuery()
     {
@@ -34,6 +36,13 @@ public class PostsRepository(DataContext context) : IPostsRepository
 
     public async Task<Post?> GetPostByIdAsync(int postId) => await context.Posts.FindAsync(postId);
 
+    public async Task<Post?> GetPostWithPostPhotosByIdAsync(int postId)
+    {
+        return await context.Posts
+            .Include(p => p.PostPhotos)
+            .FirstOrDefaultAsync(u => u.PostId == postId);
+    }
+
     public async Task<Post?> GetPostWithUsersByIdAsync(int postId)
     {
         return await context.Posts
@@ -43,5 +52,5 @@ public class PostsRepository(DataContext context) : IPostsRepository
 
     public List<int> GetPostIds(AppUser user) => user.Posts.Select(p => p.PostId).ToList();
 
-    public List<PostPhoto> GetPostPhotos(AppUser user) => user.Posts.SelectMany(p => p.PostPhotos).ToList(); 
+    public List<PostPhoto> GetPostPhotos(AppUser user) => user.Posts.SelectMany(p => p.PostPhotos).ToList();
 }

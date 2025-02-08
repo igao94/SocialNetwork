@@ -3,20 +3,15 @@ using Application.Interfaces;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.Posts.DeletePost;
+namespace Application.Admin.DeletePostAsAdmin;
 
-public class DeletePostHandler(IUnitOfWork unitOfWork,
-    IUserAccessor userAccessor,
-    IPhotosService photosService) : IRequestHandler<DeletePostCommand, Result<Unit>?>
+public class DeletePostAsAdminHandler(IUnitOfWork unitOfWork,
+    IPhotosService photosService) : IRequestHandler<DeletePostAsAdminCommand, Result<Unit>?>
 {
-    public async Task<Result<Unit>?> Handle(DeletePostCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>?> Handle(DeletePostAsAdminCommand request,
+        CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
-
-        if (user is null) return null;
-
-        var post = unitOfWork.PostsRepository.GetPostForUserById(user, request.PostId);
+        var post = await unitOfWork.PostsRepository.GetPostWithPostPhotosByIdAsync(request.PostId);
 
         if (post is null) return null;
 
@@ -28,7 +23,7 @@ public class DeletePostHandler(IUnitOfWork unitOfWork,
 
         foreach (var photo in post.PostPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
 
-        unitOfWork.PostsRepository.DeletePostForUser(user, post);
+        unitOfWork.PostsRepository.DeletePost(post);
 
         var result = await unitOfWork.SaveChangesAsync();
 
