@@ -1,6 +1,7 @@
 ﻿using Application.Accounts.GetCurrentUser;
 using Application.Accounts.Login;
 using Application.Accounts.Register;
+using Application.Accounts.ResetPassword;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,13 @@ public class AccountsController(IMediator mediator) : BaseApiController
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginCommand command)
+    {
+        return HandleResult(await mediator.Send(command));
+    }
+
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         return HandleResult(await mediator.Send(command));
     }

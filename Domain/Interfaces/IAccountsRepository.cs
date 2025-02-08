@@ -11,4 +11,7 @@ public interface IAccountsRepository
     Task<IdentityResult> AddUserToRoleAsync(AppUser user, string role);
     Task<AppUser?> GetUserWithPhotosByEmailAsync(string email);
     Task<bool> CheckPasswordAsync(AppUser user, string password);
+    Task<AppUser?> GetUserByEmailAsync(string email);
+    Task<string> GenerateResetPasswordTokenAsync(AppUser user);
+    Task<IdentityResult> ResetPasswordAsync(AppUser user, string token, string password);
 }

@@ -38,4 +38,19 @@ public class AccountsRepository(UserManager<AppUser> userManager) : IAccountsRep
     {
         return await userManager.Users.AnyAsync(u => u.UserName == username.ToLower());
     }
+
+    public async Task<AppUser?> GetUserByEmailAsync(string email)
+    {
+        return await userManager.FindByEmailAsync(email);
+    }
+
+    public async Task<string> GenerateResetPasswordTokenAsync(AppUser user)
+    {
+        return await userManager.GeneratePasswordResetTokenAsync(user);
+    }
+
+    public async Task<IdentityResult> ResetPasswordAsync(AppUser user, string token, string password)
+    {
+        return await userManager.ResetPasswordAsync(user, token, password);
+    }
 }

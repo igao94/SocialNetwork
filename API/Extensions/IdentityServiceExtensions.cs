@@ -18,7 +18,8 @@ public static class IdentityServiceExtensions
         services.AddIdentityCore<AppUser>()
             .AddRoles<IdentityRole>()
             .AddRoleManager<RoleManager<IdentityRole>>()
-            .AddEntityFrameworkStores<DataContext>();
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Authentication:TokenKey"]!));
 

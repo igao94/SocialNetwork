@@ -46,7 +46,6 @@ public class ReportsRepository(DataContext context) : IReportsRepository
     public async Task DeletePostReportsAsync(int postId)
     {
         var postReports = await context.PostReports
-            .Include(pr => pr.Reporter)
             .Where(p => p.ReportedPostId == postId)
             .ToListAsync();
 
