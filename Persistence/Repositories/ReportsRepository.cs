@@ -37,8 +37,16 @@ public class ReportsRepository(DataContext context) : IReportsRepository
     public async Task DeleteAllPostsReportsAsync(List<int> postIds)
     {
         var postReports = await context.PostReports
-            .Include(pr => pr.Reporter)
             .Where(pr => postIds.Contains(pr.ReportedPostId))
+            .ToListAsync();
+
+        context.PostReports.RemoveRange(postReports);
+    }
+
+    public async Task DeleteAllPostsReportsForUserAsync(string appUserId)
+    {
+        var postReports = await context.PostReports
+            .Where(pr => pr.ReporterId == appUserId || pr.ReportedPost.AppUserId == appUserId)
             .ToListAsync();
 
         context.PostReports.RemoveRange(postReports);
@@ -54,7 +62,7 @@ public class ReportsRepository(DataContext context) : IReportsRepository
         context.PostReports.RemoveRange(postReports);
     }
 
-    public async Task<List<UserReport>> GetAllUserReportsAsync(string appUserId)
+    public async Task<List<UserReport>> GetUsersReportsForUserAsync(string appUserId)
     {
         return await context.UserReports
             .Include(ur => ur.ReportedUser)
@@ -63,12 +71,28 @@ public class ReportsRepository(DataContext context) : IReportsRepository
             .ToListAsync();
     }
 
-    public async Task<List<PostReport>> GetAllPostReportsAsync(string appUserId)
+    public async Task<List<PostReport>> GetPostsReportsForUserAsync(string appUserId)
     {
         return await context.PostReports
             .Include(pr => pr.Reporter)
             .Include(pr => pr.ReportedPost.AppUser)
             .Where(pr => pr.ReporterId == appUserId)
+            .ToListAsync();
+    }
+
+    public async Task<List<UserReport>> GetAllUsersReportsAsync()
+    {
+        return await context.UserReports
+            .Include(ur => ur.Reporter)
+            .Include(ur => ur.ReportedUser)
+            .ToListAsync();
+    }
+
+    public async Task<List<PostReport>> GetAllPostReportsAsync()
+    {
+        return await context.PostReports
+            .Include(pr => pr.Reporter)
+            .Include(pr => pr.ReportedPost.AppUser)
             .ToListAsync();
     }
 }

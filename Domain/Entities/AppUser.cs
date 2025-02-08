@@ -13,6 +13,7 @@ public class AppUser : IdentityUser
     public ICollection<AppUserPostComment> Comments { get; set; } = [];
     public ICollection<AppUserFollowing> Followers { get; set; } = [];
     public ICollection<AppUserFollowing> Following { get; set; } = [];
-    public ICollection<UserReport> UserReports { get; set; } = [];
-    public ICollection<PostReport> PostReports { get; set; } = [];
+    public ICollection<UserReport> ReportsMade { get; set; } = [];
+    public ICollection<UserReport> ReportsReceived { get; set; } = [];
+    public ICollection<PostReport> ReportedPosts { get; set; } = [];
 }

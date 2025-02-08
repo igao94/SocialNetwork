@@ -67,28 +67,28 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
 
         builder.Entity<UserReport>()
             .HasOne(ur => ur.Reporter)
-            .WithMany(u => u.UserReports)
+            .WithMany(u => u.ReportsMade)
             .HasForeignKey(ur => ur.ReporterId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<UserReport>()
             .HasOne(ur => ur.ReportedUser)
-            .WithMany()
+            .WithMany(u => u.ReportsReceived)
             .HasForeignKey(ur => ur.ReportedUserId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<PostReport>().HasKey(pp => new { pp.ReporterId, pp.ReportedPostId });
 
         builder.Entity<PostReport>()
-            .HasOne(pp => pp.Reporter)
-            .WithMany(u => u.PostReports)
-            .HasForeignKey(pp => pp.ReporterId)
+            .HasOne(pr => pr.Reporter)
+            .WithMany(u => u.ReportedPosts)
+            .HasForeignKey(pr => pr.ReporterId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<PostReport>()
-            .HasOne(pp => pp.ReportedPost)
-            .WithMany(u => u.PostReports)
-            .HasForeignKey(pp => pp.ReportedPostId)
+            .HasOne(pr => pr.ReportedPost)
+            .WithMany(p => p.PostReports)
+            .HasForeignKey(pr => pr.ReportedPostId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

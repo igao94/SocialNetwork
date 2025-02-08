@@ -517,7 +517,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "Reporter")
-                        .WithMany("PostReports")
+                        .WithMany("ReportedPosts")
                         .HasForeignKey("ReporterId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -530,13 +530,13 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.UserReport", b =>
                 {
                     b.HasOne("Domain.Entities.AppUser", "ReportedUser")
-                        .WithMany()
+                        .WithMany("ReportsReceived")
                         .HasForeignKey("ReportedUserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.AppUser", "Reporter")
-                        .WithMany("UserReports")
+                        .WithMany("ReportsMade")
                         .HasForeignKey("ReporterId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -609,11 +609,13 @@ namespace Persistence.Migrations
 
                     b.Navigation("Photos");
 
-                    b.Navigation("PostReports");
-
                     b.Navigation("Posts");
 
-                    b.Navigation("UserReports");
+                    b.Navigation("ReportedPosts");
+
+                    b.Navigation("ReportsMade");
+
+                    b.Navigation("ReportsReceived");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>

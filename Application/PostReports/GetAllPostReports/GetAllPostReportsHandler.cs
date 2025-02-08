@@ -16,7 +16,7 @@ public class GetAllPostReportsHandler(IUnitOfWork unitOfWork,
     {
         var userId = userAccessor.GetCurrentUserId();
 
-        var postReports = await unitOfWork.ReportsRepository.GetAllPostReportsAsync(userId);
+        var postReports = await unitOfWork.ReportsRepository.GetPostsReportsForUserAsync(userId);
 
         return Result<List<PostReportDto>>.Success(mapper.Map<List<PostReportDto>>(postReports));
     }

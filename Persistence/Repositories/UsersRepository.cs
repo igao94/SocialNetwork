@@ -55,7 +55,7 @@ public class UsersRepository(DataContext context) : IUsersRepository
             .Include(u => u.Posts)
                 .ThenInclude(u => u.PostPhotos)
             .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
-    }
+    }    
 
     public void DeleteUser(AppUser user) => context.Users.Remove(user);
 

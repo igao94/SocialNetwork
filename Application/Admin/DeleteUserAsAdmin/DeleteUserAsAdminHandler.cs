@@ -3,16 +3,16 @@ using Application.Interfaces;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.Users.DeleteUser;
+namespace Application.Admin.DeleteUserAsAdmin;
 
-public class DeleteUserHandler(IUnitOfWork unitOfWork,
-    IUserAccessor userAccessor,
-    IPhotosService photosService) : IRequestHandler<DeleteUserCommand, Result<Unit>?>
+public class DeleteUserAsAdminHandler(IUnitOfWork unitOfWork,
+    IPhotosService photosService) : IRequestHandler<DeleteUserAsAdminCommand, Result<Unit>?>
 {
-    public async Task<Result<Unit>?> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>?> Handle(DeleteUserAsAdminCommand request,
+        CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
+            .GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(request.Username);
 
         if (user is null) return null;
 
@@ -30,7 +30,7 @@ public class DeleteUserHandler(IUnitOfWork unitOfWork,
         await unitOfWork.ReportsRepository.DeleteAllUserReportsAsync(user.Id);
 
         await unitOfWork.ReportsRepository.DeleteAllPostsReportsForUserAsync(user.Id);
-
+       
         var postIds = unitOfWork.PostsRepository.GetPostIds(user);
 
         await unitOfWork.CommentsRepository.DeleteCommentsByPostIdsAsync(postIds);
