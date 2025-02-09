@@ -17,78 +17,103 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<Post>()
-            .HasMany(p => p.PostPhotos)
-            .WithOne(pp => pp.Post)
-            .HasForeignKey(pp => pp.PostId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<AppUser>().HasQueryFilter(u => u.IsActive);
 
-        builder.Entity<AppUserPostLike>().HasKey(l => new { l.AppUserId, l.PostId });
+        builder.Entity<Photo>().HasQueryFilter(p => p.AppUser.IsActive);
 
-        builder.Entity<AppUserPostLike>()
-            .HasOne(l => l.AppUser)
-            .WithMany(u => u.LikedPosts)
-            .HasForeignKey(l => l.AppUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<Post>(x =>
+        {
+            x.HasQueryFilter(p => p.AppUser.IsActive);
 
-        builder.Entity<AppUserPostLike>()
-            .HasOne(l => l.Post)
-            .WithMany(p => p.Likes)
-            .HasForeignKey(l => l.PostId)
-            .OnDelete(DeleteBehavior.NoAction);
+            x.HasMany(p => p.PostPhotos)
+                .WithOne(pp => pp.Post)
+                .HasForeignKey(pp => pp.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
-        builder.Entity<AppUserPostComment>()
-            .HasOne(c => c.AppUser)
-            .WithMany(u => u.Comments)
-            .HasForeignKey(c => c.AppUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<PostPhoto>().HasQueryFilter(pp => pp.Post.AppUser.IsActive);
 
-        builder.Entity<AppUserPostComment>()
-            .HasOne(c => c.Post)
-            .WithMany(p => p.Comments)
-            .HasForeignKey(c => c.PostId)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<AppUserPostLike>(x =>
+        {
+            x.HasKey(l => new { l.AppUserId, l.PostId });
 
-        builder.Entity<AppUserFollowing>().HasKey(uf => new { uf.ObserverId, uf.TargetId });
+            x.HasQueryFilter(l => l.AppUser.IsActive && l.Post.AppUser.IsActive);
 
-        builder.Entity<AppUserFollowing>()
-            .HasOne(uf => uf.Observer)
-            .WithMany(u => u.Following)
-            .HasForeignKey(uf => uf.ObserverId)
-            .OnDelete(DeleteBehavior.NoAction);
+            x.HasOne(l => l.AppUser)
+                .WithMany(u => u.LikedPosts)
+                .HasForeignKey(l => l.AppUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+            x.HasOne(l => l.Post)
+                .WithMany(p => p.Likes)
+                .HasForeignKey(l => l.PostId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
 
-        builder.Entity<AppUserFollowing>()
-            .HasOne(uf => uf.Target)
-            .WithMany(u => u.Followers)
-            .HasForeignKey(uf => uf.TargetId)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<AppUserPostComment>(x =>
+        {
+            x.HasQueryFilter(c => c.AppUser.IsActive && c.Post.AppUser.IsActive);
 
-        builder.Entity<UserReport>().HasKey(ur => new { ur.ReporterId, ur.ReportedUserId });
 
-        builder.Entity<UserReport>()
-            .HasOne(ur => ur.Reporter)
-            .WithMany(u => u.ReportsMade)
-            .HasForeignKey(ur => ur.ReporterId)
-            .OnDelete(DeleteBehavior.NoAction);
+            x.HasOne(c => c.AppUser)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.AppUserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        builder.Entity<UserReport>()
-            .HasOne(ur => ur.ReportedUser)
-            .WithMany(u => u.ReportsReceived)
-            .HasForeignKey(ur => ur.ReportedUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            x.HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
 
-        builder.Entity<PostReport>().HasKey(pp => new { pp.ReporterId, pp.ReportedPostId });
+        builder.Entity<AppUserFollowing>(x =>
+        {
+            x.HasKey(uf => new { uf.ObserverId, uf.TargetId });
 
-        builder.Entity<PostReport>()
-            .HasOne(pr => pr.Reporter)
-            .WithMany(u => u.ReportedPosts)
-            .HasForeignKey(pr => pr.ReporterId)
-            .OnDelete(DeleteBehavior.NoAction);
+            x.HasQueryFilter(uf => uf.Observer.IsActive && uf.Target.IsActive);
 
-        builder.Entity<PostReport>()
-            .HasOne(pr => pr.ReportedPost)
-            .WithMany(p => p.PostReports)
-            .HasForeignKey(pr => pr.ReportedPostId)
-            .OnDelete(DeleteBehavior.NoAction);
+            x.HasOne(uf => uf.Observer)
+                .WithMany(u => u.Following)
+                .HasForeignKey(uf => uf.ObserverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            x.HasOne(uf => uf.Target)
+                .WithMany(u => u.Followers)
+                .HasForeignKey(uf => uf.TargetId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        builder.Entity<UserReport>(x =>
+        {
+            x.HasKey(ur => new { ur.ReporterId, ur.ReportedUserId });
+
+            x.HasQueryFilter(ur => ur.Reporter.IsActive && ur.ReportedUser.IsActive);
+
+            x.HasOne(ur => ur.Reporter)
+                .WithMany(u => u.ReportsMade)
+                .HasForeignKey(ur => ur.ReporterId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            x.HasOne(ur => ur.ReportedUser)
+                .WithMany(u => u.ReportsReceived)
+                .HasForeignKey(ur => ur.ReportedUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        builder.Entity<PostReport>(x =>
+        {
+            x.HasKey(pr => new { pr.ReporterId, pr.ReportedPostId });
+
+            x.HasQueryFilter(pr => pr.Reporter.IsActive && pr.ReportedPost.AppUser.IsActive);
+
+            x.HasOne(pr => pr.Reporter)
+                .WithMany(u => u.ReportedPosts)
+                .HasForeignKey(pr => pr.ReporterId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            x.HasOne(pr => pr.ReportedPost)
+                .WithMany(p => p.PostReports)
+                .HasForeignKey(pr => pr.ReportedPostId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
     }
 }

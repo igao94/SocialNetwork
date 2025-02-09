@@ -16,6 +16,8 @@ public class ResetPasswordHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return Result<ResetPasswordDto>.Failure("Invalid email address.");
 
+        if (!user.IsActive) return Result<ResetPasswordDto>.Failure("Your account has been deactivated.");
+
         var IsOldPassword = await unitOfWork.AccountRepository.CheckPasswordAsync(user, request.NewPassword);
 
         if (IsOldPassword) return Result<ResetPasswordDto>

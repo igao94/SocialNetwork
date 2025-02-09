@@ -32,6 +32,13 @@ public class UsersRepository(DataContext context) : IUsersRepository
     public async Task<AppUser?> GetUserByUsernameAsync(string username)
     {
         return await context.Users.FirstOrDefaultAsync(u => u.UserName == username.ToLower());
+    }    
+    
+    public async Task<AppUser?> GetUserByUsernameIncludingInactiveAsync(string username)
+    {
+        return await context.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 
     public async Task<AppUser?> GetUserWithPhotosByUsernameAsync(string username)
@@ -55,7 +62,7 @@ public class UsersRepository(DataContext context) : IUsersRepository
             .Include(u => u.Posts)
                 .ThenInclude(u => u.PostPhotos)
             .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
-    }    
+    }
 
     public void DeleteUser(AppUser user) => context.Users.Remove(user);
 

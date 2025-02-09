@@ -70,19 +70,17 @@ public class ReportsRepository(DataContext context) : IReportsRepository
             .ToListAsync();
     }
 
-    public async Task<List<UserReport>> GetAllUsersReportsAsync()
+    public IQueryable<UserReport> GetAllUsersReportForAdminQuery()
     {
-        return await context.UserReports
-            .Include(ur => ur.Reporter)
-            .Include(ur => ur.ReportedUser)
-            .ToListAsync();
+        return context.UserReports
+            .IgnoreQueryFilters()
+            .OrderByDescending(ur => ur.CreationDate);
     }
 
-    public async Task<List<PostReport>> GetAllPostReportsAsync()
+    public IQueryable<PostReport> GetAllPostsReportsForAdminQuery()
     {
-        return await context.PostReports
-            .Include(pr => pr.Reporter)
-            .Include(pr => pr.ReportedPost.AppUser)
-            .ToListAsync();
+        return context.PostReports
+            .IgnoreQueryFilters()
+            .OrderByDescending(ur => ur.CreationDate);
     }
 }

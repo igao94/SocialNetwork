@@ -6,11 +6,15 @@ using MediatR;
 namespace Application.Likes.GetLikeStatus;
 
 public class GetLikeStatusHandler(IUnitOfWork unitOfWork,
-    IUserAccessor userAccessor) : IRequestHandler<GetLikeStatusQuery, Result<bool>>
+    IUserAccessor userAccessor) : IRequestHandler<GetLikeStatusQuery, Result<bool>?>
 {
-    public async Task<Result<bool>> Handle(GetLikeStatusQuery request, CancellationToken cancellationToken)
+    public async Task<Result<bool>?> Handle(GetLikeStatusQuery request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId();
+
+        var post = await unitOfWork.PostsRepository.GetPostByIdAsync(request.PostId);
+
+        if (post is null) return null;
 
         var existingLike = await unitOfWork.LikesRepository.GetLikeByIdAsync(userId, request.PostId);
 

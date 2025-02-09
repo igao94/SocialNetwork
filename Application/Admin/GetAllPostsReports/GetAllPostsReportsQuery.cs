@@ -1,7 +1,7 @@
-﻿using Application.Core;
-using Application.PostReports.DTOs;
+﻿using Application.Admin.DTOs;
+using Application.Core;
 using MediatR;
 
 namespace Application.Admin.GetAllPostsReports;
 
-public record GetAllPostsReportsQuery : IRequest<Result<List<PostReportDto>>>;
+public record GetAllPostsReportsQuery : IRequest<Result<List<AdminPostReportDto>>>;

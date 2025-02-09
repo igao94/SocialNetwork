@@ -1,4 +1,5 @@
-﻿using Application.Comments.DTOs;
+﻿using Application.Admin.DTOs;
+using Application.Comments.DTOs;
 using Application.Helpers;
 using Application.Likes.DTOs;
 using Application.Photos.DTOs;
@@ -53,9 +54,23 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
             .ForMember(dest => dest.ReportedUserUsername, opt => opt.MapFrom(src => src.ReportedUser.UserName));
 
+        CreateMap<UserReport, AdminUserReportDto>()
+            .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
+            .ForMember(dest => dest.ReportedUserUsername, opt => opt.MapFrom(src => src.ReportedUser.UserName))
+            .ForMember(dest => dest.IsReporterActive, opt => opt.MapFrom(src => src.Reporter.IsActive))
+            .ForMember(dest => dest.IsReportedUserActive, opt => opt.MapFrom(src => src.ReportedUser.IsActive));
+
         CreateMap<PostReport, PostReportDto>()
             .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
-            .ForMember(dest => dest.ReportedPostUserUsername, opt => 
+            .ForMember(dest => dest.ReportedPostUserUsername, opt =>
                 opt.MapFrom(src => src.ReportedPost.AppUser.UserName));
+
+        CreateMap<PostReport, AdminPostReportDto>()
+            .ForMember(dest => dest.ReporterUsername, opt => opt.MapFrom(src => src.Reporter.UserName))
+            .ForMember(dest => dest.ReportedPostUserUsername, opt =>
+                opt.MapFrom(src => src.ReportedPost.AppUser.UserName))
+            .ForMember(dest => dest.IsReporterActive, opt => opt.MapFrom(src => src.Reporter.IsActive))
+            .ForMember(dest => dest.IsReporterPostUserActive, opt =>
+                opt.MapFrom(src => src.ReportedPost.AppUser.IsActive));
     }
 }

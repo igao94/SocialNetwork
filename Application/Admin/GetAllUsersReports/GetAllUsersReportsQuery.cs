@@ -1,7 +1,7 @@
-﻿using Application.Core;
-using Application.UserReports.DTOs;
+﻿using Application.Admin.DTOs;
+using Application.Core;
 using MediatR;
 
 namespace Application.Admin.GetAllUsersReports;
 
-public record GetAllUsersReportsQuery : IRequest<Result<List<UserReportDto>>>;
+public record GetAllUsersReportsQuery : IRequest<Result<List<AdminUserReportDto>>>;

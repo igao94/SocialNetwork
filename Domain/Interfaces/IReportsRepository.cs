@@ -14,7 +14,7 @@ public interface IReportsRepository
     Task DeletePostReportsAsync(int postId);
     Task<List<UserReport>> GetUsersReportsForUserAsync(string appUserId);
     Task<List<PostReport>> GetPostsReportsForUserAsync(string appUserId);
-    Task<List<UserReport>> GetAllUsersReportsAsync();
-    Task<List<PostReport>> GetAllPostReportsAsync();
     Task DeleteAllPostsReportsForUserAsync(string appUserId);
+    IQueryable<UserReport> GetAllUsersReportForAdminQuery();
+    IQueryable<PostReport> GetAllPostsReportsForAdminQuery();
 }

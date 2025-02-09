@@ -22,9 +22,10 @@ public class AccountsRepository(UserManager<AppUser> userManager) : IAccountsRep
         return await userManager.CreateAsync(user, password);
     }
 
-    public async Task<AppUser?> GetUserWithPhotosByEmailAsync(string email)
+    public async Task<AppUser?> GetUserWithPhotosByEmailIncludingInactiveAsync(string email)
     {
         return await userManager.Users
+            .IgnoreQueryFilters()
             .Include(u => u.Photos)
             .FirstOrDefaultAsync(u => u.Email == email);
     }
@@ -52,5 +53,10 @@ public class AccountsRepository(UserManager<AppUser> userManager) : IAccountsRep
     public async Task<IdentityResult> ResetPasswordAsync(AppUser user, string token, string password)
     {
         return await userManager.ResetPasswordAsync(user, token, password);
+    }
+
+    public async Task<bool> IsUserInRoleAsync(AppUser user, string role)
+    {
+        return await userManager.IsInRoleAsync(user, role);
     }
 }

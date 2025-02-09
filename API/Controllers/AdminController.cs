@@ -1,4 +1,6 @@
-﻿using Application.Admin.DeletePostAsAdmin;
+﻿using Application.Admin.ActivateUserAccount;
+using Application.Admin.DeactivateUserAccount;
+using Application.Admin.DeletePostAsAdmin;
 using Application.Admin.DeletePostReport;
 using Application.Admin.DeleteUserAsAdmin;
 using Application.Admin.DeleteUserReport;
@@ -49,5 +51,17 @@ public class AdminController(IMediator mediator) : BaseApiController
     public async Task<IActionResult> DeletePost(int postId)
     {
         return HandleResult(await mediator.Send(new DeletePostAsAdminCommand(postId)));
+    }
+
+    [HttpPut("deactivate-user-account/{username}")]
+    public async Task<IActionResult> DeactivateUserAccount(string username)
+    {
+        return HandleResult(await mediator.Send(new DeactivateUserAccountCommand(username)));
+    }
+
+    [HttpPut("activate-user-account{username}")]
+    public async Task<IActionResult> ActivateUserAccount(string username)
+    {
+        return HandleResult(await mediator.Send(new ActivateUserAccountCommand(username)));
     }
 }
