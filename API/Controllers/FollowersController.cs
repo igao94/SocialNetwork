@@ -1,4 +1,5 @@
-﻿using Application.Followers.GetAllFollows;
+﻿using Application.Followers;
+using Application.Followers.GetAllFollows;
 using Application.Followers.GetFollowedUsersPost;
 using Application.Followers.ToggleFollow;
 using MediatR;
@@ -14,10 +15,10 @@ public class FollowersController(IMediator mediator) : BaseApiController
         return HandleResult(await mediator.Send(new ToggleFollowCommand(username)));
     }
 
-    [HttpGet("{searchTerm}")]
-    public async Task<IActionResult> GetUserFollow(string searchTerm)
+    [HttpGet]
+    public async Task<IActionResult> GetUserFollow([FromQuery] FollowersParams followersParams)
     {
-        return HandleResult(await mediator.Send(new GetAllFollowsQuery(searchTerm)));
+        return HandlePagedResult(await mediator.Send(new GetAllFollowsQuery(followersParams)));
     }
 
     [HttpGet("feed")]

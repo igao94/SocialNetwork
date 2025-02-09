@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Followers.GetAllFollows;
 
-public record GetAllFollowsQuery(string SearchTerm) : IRequest<Result<List<UserDto>>>;
+public record GetAllFollowsQuery(FollowersParams FollowersParams) : IRequest<Result<PagedList<UserDto>>>;

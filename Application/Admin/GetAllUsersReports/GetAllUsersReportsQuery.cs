@@ -4,4 +4,5 @@ using MediatR;
 
 namespace Application.Admin.GetAllUsersReports;
 
-public record GetAllUsersReportsQuery : IRequest<Result<List<AdminUserReportDto>>>;
+public record GetAllUsersReportsQuery(AdminUserReportsParams AdminUserReportsParams) 
+    : IRequest<Result<PagedList<AdminUserReportDto>>>;

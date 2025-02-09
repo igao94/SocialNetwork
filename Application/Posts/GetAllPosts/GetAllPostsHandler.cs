@@ -4,22 +4,22 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Posts.GetAllPosts;
 
 public class GetAllPostsHandler(IUnitOfWork unitOfWork,
-    IMapper mapper) : IRequestHandler<GetAllPostsQuery, Result<List<PostDto>>?>
+    IMapper mapper) : IRequestHandler<GetAllPostsQuery, Result<PagedList<PostDto>>?>
 {
-    public async Task<Result<List<PostDto>>?> Handle(GetAllPostsQuery request,
+    public async Task<Result<PagedList<PostDto>>?> Handle(GetAllPostsQuery request,
         CancellationToken cancellationToken)
-    { 
+    {
         var postsQuery = unitOfWork.PostsRepository.GetAllPostsQuery();
 
-        var posts = await postsQuery
-            .ProjectTo<PostDto>(mapper.ConfigurationProvider)
-            .ToListAsync();
+        var posts = await PagedList<PostDto>
+            .CreateAsync(postsQuery.ProjectTo<PostDto>(mapper.ConfigurationProvider),
+            request.PostsParams.PageNumber,
+            request.PostsParams.PageSize);
 
-        return Result<List<PostDto>>.Success(posts);
+        return Result<PagedList<PostDto>>.Success(posts);
     }
 }

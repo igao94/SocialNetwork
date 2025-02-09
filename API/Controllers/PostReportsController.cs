@@ -1,4 +1,5 @@
-﻿using Application.PostReports.AddReport;
+﻿using Application.PostReports;
+using Application.PostReports.AddReport;
 using Application.PostReports.DeleteReport;
 using Application.PostReports.GetAllPostReports;
 using MediatR;
@@ -21,8 +22,8 @@ public class PostReportsController(IMediator mediator) : BaseApiController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetPostReports()
+    public async Task<IActionResult> GetPostReports([FromQuery] PostReportsParams postReportsParams)
     {
-        return HandleResult(await mediator.Send(new GetAllPostReportsQuery()));
+        return HandlePagedResult(await mediator.Send(new GetAllPostReportsQuery(postReportsParams)));
     }
 }

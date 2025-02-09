@@ -43,17 +43,10 @@ public class LikesRepository(DataContext context) : ILikesRepository
         context.AppUserPostLikes.RemoveRange(likes);
     }
 
-    public async Task<List<AppUser>> GetUsersWhoLikedPostAsync(int postId)
+    public IQueryable<AppUser> GetUsersWhoLikedPostQuery(int postId)
     {
-        return await context.AppUserPostLikes
+        return context.AppUserPostLikes
             .Where(l => l.PostId == postId)
-            .Select(l => new AppUser
-            {
-                FirstName = l.AppUser.FirstName,
-                LastName = l.AppUser.LastName,
-                UserName = l.AppUser.UserName,
-                Photos = l.AppUser.Photos
-            })
-            .ToListAsync();
+            .Select(l => l.AppUser);
     }
 }

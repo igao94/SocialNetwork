@@ -1,4 +1,5 @@
-﻿using Application.Admin.ActivateUserAccount;
+﻿using Application.Admin;
+using Application.Admin.ActivateUserAccount;
 using Application.Admin.DeactivateUserAccount;
 using Application.Admin.DeletePostAsAdmin;
 using Application.Admin.DeletePostReport;
@@ -17,15 +18,17 @@ namespace API.Controllers;
 public class AdminController(IMediator mediator) : BaseApiController
 {
     [HttpGet("users-reports")]
-    public async Task<IActionResult> GetAllUsersReports()
+    public async Task<IActionResult> GetAllUsersReports
+        ([FromQuery] AdminUserReportsParams adminUserReportsParams)
     {
-        return HandleResult(await mediator.Send(new GetAllUsersReportsQuery()));
+        return HandlePagedResult(await mediator.Send(new GetAllUsersReportsQuery(adminUserReportsParams)));
     }
 
     [HttpGet("posts-reports")]
-    public async Task<IActionResult> GetAllPostsReports()
+    public async Task<IActionResult> GetAllPostsReports
+        ([FromQuery] AdminPostReportsParams adminPostReportsParams)
     {
-        return HandleResult(await mediator.Send(new GetAllPostsReportsQuery()));
+        return HandlePagedResult(await mediator.Send(new GetAllPostsReportsQuery(adminPostReportsParams)));
     }
 
     [HttpDelete("delete-user-report/{reporterUsername}/{reportedUserUsername}")]

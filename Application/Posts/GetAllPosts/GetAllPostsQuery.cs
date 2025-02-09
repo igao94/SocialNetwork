@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Posts.GetAllPosts;
 
-public record GetAllPostsQuery : IRequest<Result<List<PostDto>>>;
+public record GetAllPostsQuery(PostsParams PostsParams) : IRequest<Result<PagedList<PostDto>>>;

@@ -52,22 +52,18 @@ public class ReportsRepository(DataContext context) : IReportsRepository
         context.PostReports.RemoveRange(postReports);
     }
 
-    public async Task<List<UserReport>> GetUsersReportsForUserAsync(string appUserId)
+    public IQueryable<UserReport> GetUsersReportsForUserQuery(string appUserId)
     {
-        return await context.UserReports
-            .Include(ur => ur.ReportedUser)
-            .Include(ur => ur.Reporter)
-            .Where(ur => ur.ReporterId == appUserId)
-            .ToListAsync();
+        return context.UserReports
+            .OrderByDescending(u => u.CreationDate)
+            .Where(u => u.ReporterId == appUserId);
     }
 
-    public async Task<List<PostReport>> GetPostsReportsForUserAsync(string appUserId)
+    public IQueryable<PostReport> GetPostsReportsForUserQuery(string appUserId)
     {
-        return await context.PostReports
-            .Include(pr => pr.Reporter)
-            .Include(pr => pr.ReportedPost.AppUser)
-            .Where(pr => pr.ReporterId == appUserId)
-            .ToListAsync();
+        return context.PostReports
+            .OrderByDescending(u => u.CreationDate)
+            .Where(u => u.ReporterId == appUserId);
     }
 
     public IQueryable<UserReport> GetAllUsersReportForAdminQuery()

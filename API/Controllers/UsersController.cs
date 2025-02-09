@@ -1,4 +1,5 @@
-﻿using Application.Users.DeleteUser;
+﻿using Application.Users;
+using Application.Users.DeleteUser;
 using Application.Users.GetAllUsers;
 using Application.Users.GetUserByUsername;
 using Application.Users.UpdateUser;
@@ -10,9 +11,9 @@ namespace API.Controllers;
 public class UsersController(IMediator mediator) : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers(string? searchTerm)
+    public async Task<IActionResult> GetAllUsers([FromQuery] UsersParams usersParams)
     {
-        return HandleResult(await mediator.Send(new GetAllUsersQuery(searchTerm)));
+        return HandlePagedResult(await mediator.Send(new GetAllUsersQuery(usersParams)));
     }
 
     [HttpGet("{username}")]

@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Likes.GetPostLikes;
 
-public record GetPostLikesQuery(int PostId) : IRequest<Result<List<UserLikeDto>>>;
+public record GetPostLikesQuery(LikesParams LikesParams) : IRequest<Result<PagedList<UserLikeDto>>>;

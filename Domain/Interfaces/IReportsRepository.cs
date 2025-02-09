@@ -12,9 +12,9 @@ public interface IReportsRepository
     void AddPostReport(PostReport postReport);
     void DeletePostReport(PostReport postReport);
     Task DeletePostReportsAsync(int postId);
-    Task<List<UserReport>> GetUsersReportsForUserAsync(string appUserId);
-    Task<List<PostReport>> GetPostsReportsForUserAsync(string appUserId);
     Task DeleteAllPostsReportsForUserAsync(string appUserId);
     IQueryable<UserReport> GetAllUsersReportForAdminQuery();
     IQueryable<PostReport> GetAllPostsReportsForAdminQuery();
+    IQueryable<UserReport> GetUsersReportsForUserQuery(string appUserId);
+    IQueryable<PostReport> GetPostsReportsForUserQuery(string appUserId);
 }

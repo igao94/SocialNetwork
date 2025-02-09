@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Application.Users.GetAllUsers;
 
-public record GetAllUsersQuery(string? SearchTerm) : IRequest<Result<List<UserDto>>>;
+public record GetAllUsersQuery(UsersParams UsersParams) : IRequest<Result<PagedList<UserDto>>>;
  

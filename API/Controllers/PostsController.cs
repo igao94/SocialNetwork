@@ -1,4 +1,5 @@
-﻿using Application.Posts.AddPost;
+﻿using Application.Posts;
+using Application.Posts.AddPost;
 using Application.Posts.DeletePost;
 using Application.Posts.GetAllPosts;
 using Application.Posts.GetPostById;
@@ -11,9 +12,9 @@ namespace API.Controllers;
 public class PostController(IMediator mediator) : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllPosts()
+    public async Task<IActionResult> GetAllPosts([FromQuery] PostsParams postParams)
     {
-        return HandleResult(await mediator.Send(new GetAllPostsQuery()));
+        return HandlePagedResult(await mediator.Send(new GetAllPostsQuery(postParams)));
     }
 
     [HttpGet("{postId}")]

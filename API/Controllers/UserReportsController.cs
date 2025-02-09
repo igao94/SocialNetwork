@@ -1,4 +1,6 @@
-﻿using Application.UserReports.AddReport;
+﻿using Application.PostReports;
+using Application.UserReports;
+using Application.UserReports.AddReport;
 using Application.UserReports.DeleteReport;
 using Application.UserReports.GetAllUserReports;
 using MediatR;
@@ -21,8 +23,8 @@ public class UserReportsController(IMediator mediator) : BaseApiController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetUserReports()
+    public async Task<IActionResult> GetUserReports([FromQuery] UserReportsParams userReportsParams)
     {
-        return HandleResult(await mediator.Send(new GetAllUserReportsQuery()));
+        return HandlePagedResult(await mediator.Send(new GetAllUserReportsQuery(userReportsParams)));
     }
 }

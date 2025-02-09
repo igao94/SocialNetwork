@@ -5,22 +5,24 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.GetAllUsers;
 
 public class GetAllUsersHandler(IUnitOfWork unitOfWork,
     IUserAccessor userAccessor,
-    IMapper mapper) : IRequestHandler<GetAllUsersQuery, Result<List<UserDto>>>
+    IMapper mapper) : IRequestHandler<GetAllUsersQuery, Result<PagedList<UserDto>>>
 {
-    public async Task<Result<List<UserDto>>> Handle(GetAllUsersQuery request,
+    public async Task<Result<PagedList<UserDto>>> Handle(GetAllUsersQuery request,
         CancellationToken cancellationToken)
     {
         var usersQuery = unitOfWork.UsersRepository
-            .GetAllUsersQuery(userAccessor.GetCurrentUserUsername(), request.SearchTerm);
+            .GetAllUsersQuery(userAccessor.GetCurrentUserUsername(), request.UsersParams.SearchTerm);
 
-        var users = await usersQuery.ProjectTo<UserDto>(mapper.ConfigurationProvider).ToListAsync();
+        var users = await PagedList<UserDto>
+            .CreateAsync(usersQuery.ProjectTo<UserDto>(mapper.ConfigurationProvider),
+            request.UsersParams.PageNumber,
+            request.UsersParams.PageSize);
 
-        return Result<List<UserDto>>.Success(users);
+        return Result<PagedList<UserDto>>.Success(users);
     }
 }

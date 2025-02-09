@@ -1,4 +1,5 @@
-﻿using Application.Likes.GetLikeStatus;
+﻿using Application.Likes;
+using Application.Likes.GetLikeStatus;
 using Application.Likes.GetPostLikes;
 using Application.Likes.ToggleLike;
 using MediatR;
@@ -8,10 +9,10 @@ namespace API.Controllers;
 
 public class LikesController(IMediator mediator) : BaseApiController
 {
-    [HttpGet("users-who-liked-post/{postId}")]
-    public async Task<IActionResult> GetUsersWhoLikedPost(int postId)
+    [HttpGet("users-who-liked-post")]
+    public async Task<IActionResult> GetUsersWhoLikedPost([FromQuery] LikesParams likesParams)
     {
-        return HandleResult(await mediator.Send(new GetPostLikesQuery(postId)));
+        return HandlePagedResult(await mediator.Send(new GetPostLikesQuery(likesParams)));
     }
 
     [HttpGet("status/{postId}")]
