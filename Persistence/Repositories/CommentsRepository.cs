@@ -44,4 +44,10 @@ public class CommentsRepository(DataContext context) : ICommentsRepository
             .Where(c => c.AppUserId == appUserId && c.Id == commentId)
             .FirstOrDefaultAsync();
     }
+
+    public IQueryable<AppUserPostComment> GetAllCommentsQuery(string appUserId)
+    {
+        return context.AppUserPostComment
+            .Where(c => c.AppUserId == appUserId);
+    }
 }

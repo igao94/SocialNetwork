@@ -19,6 +19,9 @@ public class BaseApiController : ControllerBase
 
         if (typeof(T) == typeof(Unit)) return NoContent();
 
+        if (typeof(T) == typeof(byte[]) && result.Value is not null)
+            return File((byte[])(object)result.Value, "application/zip", "UserData.zip");
+
         if (!string.IsNullOrEmpty(actionName) && routeValues is not null)
             return CreatedAtAction(actionName, routeValues, result.Value);
 

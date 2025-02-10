@@ -14,4 +14,5 @@ public interface IUsersRepository
     string? GetMainPhoto(AppUser user);
     Task<AppUser?> GetUserByIdAsync(string id);
     Task<AppUser?> GetUserByUsernameIncludingInactiveAsync(string username);
+    Task<AppUser?> GetUserWithPhotosAndPostsAndPostPhotosAndFollowByUsernameAsync(string username);
 }

@@ -12,6 +12,7 @@ using Persistence.Repositories;
 using Infrastructure;
 using Infrastructure.Services.Photos;
 using Application.Interfaces;
+using Infrastructure.Services;
 
 namespace API.Extensions;
 
@@ -100,6 +101,8 @@ public static class ApplicationServiceExtensions
         services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
         services.AddScoped<IPhotosService, PhotosService>();
+
+        services.AddScoped<IUserDataExportService, UserDataExportService>();
 
         return services;
     }

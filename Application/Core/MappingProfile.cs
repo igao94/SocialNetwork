@@ -1,5 +1,6 @@
 ﻿using Application.Admin.DTOs;
 using Application.Comments.DTOs;
+using Application.Followers.DTOs;
 using Application.Helpers;
 using Application.Likes.DTOs;
 using Application.Photos.DTOs;
@@ -72,5 +73,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.IsReporterActive, opt => opt.MapFrom(src => src.Reporter.IsActive))
             .ForMember(dest => dest.IsReporterPostUserActive, opt =>
                 opt.MapFrom(src => src.ReportedPost.AppUser.IsActive));
+
+        CreateMap<AppUserFollowing, FollowDto>()
+            .ForMember(dest => dest.ObserverUsername, opt => opt.MapFrom(src => src.Observer.UserName))
+            .ForMember(dest => dest.TargetUsername, opt => opt.MapFrom(src => src.Target.UserName));
+
+        CreateMap<AppUserPostLike, LikeDto>()
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
+            .ForMember(dest => dest.LikedPostId, opt => opt.MapFrom(src => src.Post.PostId));
     }
 }

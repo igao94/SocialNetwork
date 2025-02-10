@@ -11,4 +11,5 @@ public interface IFollowingsRepository
     public IQueryable<AppUser> GetUserFollowingQuery(string appUserId);
     Task RemoveAllFollowsForUserAsync(string appUserId);
     IQueryable<Post> GetPostsFromFollowedUsersQuery(string appUserId);
+    IQueryable<AppUserFollowing> GetAllUserFollowsQuery(string appUserId);
 }

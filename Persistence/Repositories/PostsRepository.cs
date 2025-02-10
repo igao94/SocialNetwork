@@ -52,5 +52,15 @@ public class PostsRepository(DataContext context) : IPostsRepository
 
     public List<int> GetPostIds(AppUser user) => user.Posts.Select(p => p.PostId).ToList();
 
-    public List<PostPhoto> GetPostPhotos(AppUser user) => user.Posts.SelectMany(p => p.PostPhotos).ToList();
+    public List<PostPhoto> GetPostPhotos(AppUser user)
+    {
+        return user.Posts
+            .SelectMany(p => p.PostPhotos)
+            .ToList();
+    }
+
+    public async Task<Post?> GetPostByUserIdAsync(string appUserId)
+    {
+        return await context.Posts.FirstOrDefaultAsync(u => u.AppUserId == appUserId);
+    }
 }

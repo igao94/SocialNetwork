@@ -49,4 +49,10 @@ public class LikesRepository(DataContext context) : ILikesRepository
             .Where(l => l.PostId == postId)
             .Select(l => l.AppUser);
     }
+
+    public IQueryable<AppUserPostLike> GetAllUserLikesQuery(string appUserId)
+    {
+        return context.AppUserPostLikes
+            .Where(u => u.AppUserId == appUserId);
+    }
 }

@@ -10,4 +10,5 @@ public interface ICommentsRepository
     Task DeleteCommentsByPostIdAsync(int postId);
     Task DeleteCommentsByUserIdAsync(string appUserId);
     Task<AppUserPostComment?> GetCommentByUserIdAsync(string appUserId, int commentId);
+    IQueryable<AppUserPostComment> GetAllCommentsQuery(string appUserId);
 }

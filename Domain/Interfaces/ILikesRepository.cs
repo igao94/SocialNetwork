@@ -11,4 +11,5 @@ public interface ILikesRepository
     Task RemovePostsLikesAsync(List<int> postIds);
     Task RemoveUserLikesAsync(string appUserId);
     IQueryable<AppUser> GetUsersWhoLikedPostQuery(int postId);
+    IQueryable<AppUserPostLike> GetAllUserLikesQuery(string appUserId);
 }

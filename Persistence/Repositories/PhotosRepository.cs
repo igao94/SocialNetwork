@@ -17,4 +17,6 @@ public class PhotosRepository : IPhotosRepository
     public bool UserHasAnyPhotos(AppUser user) => user.Photos.Count != 0;
 
     public Photo? GetCurrentMainPhoto(AppUser user) => user.Photos.FirstOrDefault(p => p.IsMain);
+
+    public IQueryable<Photo> GetAllUserPhotosQuery(AppUser user) => user.Photos.AsQueryable();
 }

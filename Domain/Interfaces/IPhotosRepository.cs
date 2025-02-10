@@ -9,4 +9,5 @@ public interface IPhotosRepository
     Photo? GetPhotoById(AppUser user, int photoId);
     bool UserHasAnyPhotos(AppUser user);
     Photo? GetCurrentMainPhoto(AppUser user);
+    IQueryable<Photo> GetAllUserPhotosQuery(AppUser user);
 }

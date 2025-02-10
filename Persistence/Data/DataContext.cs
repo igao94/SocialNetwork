@@ -43,6 +43,7 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
                 .WithMany(u => u.LikedPosts)
                 .HasForeignKey(l => l.AppUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
             x.HasOne(l => l.Post)
                 .WithMany(p => p.Likes)
                 .HasForeignKey(l => l.PostId)

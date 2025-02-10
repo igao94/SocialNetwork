@@ -1,4 +1,5 @@
-﻿using Application.Users;
+﻿using Application.GDPR.GetUserData;
+using Application.Users;
 using Application.Users.DeleteUser;
 using Application.Users.GetAllUsers;
 using Application.Users.GetUserByUsername;
@@ -32,5 +33,11 @@ public class UsersController(IMediator mediator) : BaseApiController
     public async Task<IActionResult> DeleteUser()
     {
         return HandleResult(await mediator.Send(new DeleteUserCommand()));
+    }
+
+    [HttpGet("download-user-data")]
+    public async Task<IActionResult> DownloadUserData()
+    {
+        return HandleResult(await mediator.Send(new GetUserDataQuery()));
     }
 }

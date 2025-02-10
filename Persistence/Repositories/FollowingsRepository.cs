@@ -57,4 +57,10 @@ public class FollowingsRepository(DataContext context) : IFollowingsRepository
 
         return query;
     }
+
+    public IQueryable<AppUserFollowing> GetAllUserFollowsQuery(string appUserId)
+    {
+        return context.AppUserFollowings
+            .Where(u => u.ObserverId == appUserId || u.TargetId == appUserId);
+    }
 }
