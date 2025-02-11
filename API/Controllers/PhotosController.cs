@@ -14,7 +14,7 @@ public class PhotosController(IMediator mediator) : BaseApiController
         return HandleResult(await mediator.Send(command));
     }
 
-    [HttpPut("{photoId}/setMainPhoto")]
+    [HttpPut("setMainPhoto/{photoId}")]
     public async Task<IActionResult> SetMainPhoto(int photoId)
     {
         return HandleResult(await mediator.Send(new SetMainPhotoCommand(photoId)));

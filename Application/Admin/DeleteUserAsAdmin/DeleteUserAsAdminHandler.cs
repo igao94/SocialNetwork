@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Domain.Interfaces;
 using MediatR;
+using Persistence.Authorization.Constants;
 
 namespace Application.Admin.DeleteUserAsAdmin;
 
@@ -15,6 +16,10 @@ public class DeleteUserAsAdminHandler(IUnitOfWork unitOfWork,
             .GetUserWithPhotosAndPostsAndPostPhotosByUsernameAsync(request.Username);
 
         if (user is null) return null;
+
+        var IsUserAdmin = await unitOfWork.AccountRepository.IsUserInRoleAsync(user, UserRoles.Admin);
+
+        if (IsUserAdmin) return Result<Unit>.Failure("Can't delete admin account.");
 
         foreach (var photo in user.Photos)
         {
