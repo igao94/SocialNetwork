@@ -1,16 +1,16 @@
 ﻿using Application.Accounts.DTOs;
 using Application.Core;
 using Application.Interfaces;
+using Application.Photos.DTOs;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Accounts.GetCurrentUser;
 
 public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
-    IUserAccessor userAccessor,
-    ITokenService tokenService) : IRequestHandler<GetCurrentUserQuery, Result<AccountDto>?>
+    IUserAccessor userAccessor) : IRequestHandler<GetCurrentUserQuery, Result<CurrentUserDto>?>
 {
-    public async Task<Result<AccountDto>?> Handle(GetCurrentUserQuery request,
+    public async Task<Result<CurrentUserDto>?> Handle(GetCurrentUserQuery request,
         CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
@@ -18,15 +18,20 @@ public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
 
         if (user is null || user.UserName is null || user.Email is null) return null;
 
-        return Result<AccountDto>.Success(new AccountDto
+        return Result<CurrentUserDto>.Success(new CurrentUserDto
         {
             FirstName = user.FirstName,
             LastName = user.LastName,
             Username = user.UserName,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
-            Token = await tokenService.GetTokenAsync(user),
-            PhotoUrl = unitOfWork.UsersRepository.GetMainPhoto(user)
+            MainPhotoUrl = unitOfWork.UsersRepository.GetMainPhoto(user),
+            Photos = user.Photos.Select(p => new PhotoDto
+            {
+                PhotoId = p.PhotoId,
+                Url = p.Url,
+                IsMain = p.IsMain
+            }).ToList()
         });
     }
 }

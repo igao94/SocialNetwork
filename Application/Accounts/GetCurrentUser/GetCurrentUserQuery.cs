@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Application.Accounts.GetCurrentUser;
 
-public record GetCurrentUserQuery : IRequest<Result<AccountDto>>;
+public record GetCurrentUserQuery : IRequest<Result<CurrentUserDto>>;
 
