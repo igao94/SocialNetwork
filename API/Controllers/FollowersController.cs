@@ -22,8 +22,8 @@ public class FollowersController(IMediator mediator) : BaseApiController
     }
 
     [HttpGet("feed")]
-    public async Task<IActionResult> GetFollowedUsersPosts()
+    public async Task<IActionResult> GetFollowedUsersPosts([FromQuery] FeedParams feedParams)
     {
-        return HandleResult(await mediator.Send(new GetFollowedUsersPostsQuery()));
+        return HandlePagedResult(await mediator.Send(new GetFollowedUsersPostsQuery(feedParams)));
     }
 }

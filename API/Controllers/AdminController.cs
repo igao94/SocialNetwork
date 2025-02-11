@@ -62,7 +62,7 @@ public class AdminController(IMediator mediator) : BaseApiController
         return HandleResult(await mediator.Send(new DeactivateUserAccountCommand(username)));
     }
 
-    [HttpPut("activate-user-account{username}")]
+    [HttpPut("activate-user-account/{username}")]
     public async Task<IActionResult> ActivateUserAccount(string username)
     {
         return HandleResult(await mediator.Send(new ActivateUserAccountCommand(username)));

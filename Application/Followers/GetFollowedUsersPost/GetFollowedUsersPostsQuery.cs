@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Followers.GetFollowedUsersPost;
 
-public record GetFollowedUsersPostsQuery : IRequest<Result<List<PostDto>>>;
+public record GetFollowedUsersPostsQuery(FeedParams FeedParams) : IRequest<Result<PagedList<PostDto>>>;
