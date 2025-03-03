@@ -1,5 +1,6 @@
 ﻿using Application.Photos.AddPhoto;
 using Application.Photos.DeletePhoto;
+using Application.Photos.GetPhotos;
 using Application.Photos.SetMainPhoto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,5 +25,11 @@ public class PhotosController(IMediator mediator) : BaseApiController
     public async Task<IActionResult> DeletePhoto(int photoId)
     {
         return HandleResult(await mediator.Send(new DeletePhotoCommand(photoId)));
+    }
+
+    [HttpGet("{username}")]
+    public async Task<IActionResult> GetPhotosForUser(string username)
+    {
+        return HandleResult(await mediator.Send(new GetPhotosForUserQuery(username)));
     }
 }

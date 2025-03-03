@@ -666,6 +666,31 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get photos for user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Photos/igor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Photos",
+								"igor"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

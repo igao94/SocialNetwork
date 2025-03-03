@@ -17,7 +17,14 @@ public class DataContext(DbContextOptions<DataContext> options) : IdentityDbCont
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<AppUser>().HasQueryFilter(u => u.IsActive);
+        builder.Entity<AppUser>(x =>
+        {
+            x.HasQueryFilter(u => u.IsActive);
+
+            x.HasIndex(u => u.UserName).IsUnique();
+
+            x.HasIndex(u => u.Email).IsUnique();
+        });
 
         builder.Entity<Photo>().HasQueryFilter(p => p.AppUser.IsActive);
 

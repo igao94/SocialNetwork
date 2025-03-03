@@ -1,6 +1,4 @@
-﻿using Application.Photos.DTOs;
-
-namespace Application.Accounts.DTOs;
+﻿namespace Application.Accounts.DTOs;
 
 public class CurrentUserDto
 {
@@ -10,5 +8,6 @@ public class CurrentUserDto
     public string Email { get; set; } = string.Empty;
     public DateOnly DateOfBirth { get; set; }
     public string? MainPhotoUrl { get; set; }
-    public ICollection<PhotoDto> Photos { get; set; } = [];
+    public int FollowersCount { get; set; }
+    public int FollowingCount { get; set; }
 }

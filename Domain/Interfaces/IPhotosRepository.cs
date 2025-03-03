@@ -10,4 +10,5 @@ public interface IPhotosRepository
     bool UserHasAnyPhotos(AppUser user);
     Photo? GetCurrentMainPhoto(AppUser user);
     IQueryable<Photo> GetAllUserPhotosQuery(AppUser user);
+    Task<List<Photo>> GetPhotosForUserAsync(string username);
 }

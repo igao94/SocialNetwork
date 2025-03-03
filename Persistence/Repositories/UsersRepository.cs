@@ -9,7 +9,9 @@ public class UsersRepository(DataContext context) : IUsersRepository
 {
     public IQueryable<AppUser> GetAllUsersQuery(string currentUserUsername, string? searchTerm)
     {
-        IQueryable<AppUser> query = context.Users.Where(u => u.UserName != currentUserUsername);
+        IQueryable<AppUser> query = context.Users
+            .OrderByDescending(u => u.DateOfBirth)
+            .Where(u => u.UserName != currentUserUsername);
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -45,6 +47,15 @@ public class UsersRepository(DataContext context) : IUsersRepository
     {
         return await context.Users
             .Include(u => u.Photos)
+            .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
+    }
+
+    public async Task<AppUser?> GetUserWithPhotosAndFollowersByUsernameAsync(string username)
+    {
+        return await context.Users
+            .Include(u => u.Photos)
+            .Include(u => u.Followers)
+            .Include(u => u.Following)
             .FirstOrDefaultAsync(u => u.UserName == username.ToLower());
     }
 

@@ -1,7 +1,6 @@
 ﻿using Application.Accounts.DTOs;
 using Application.Core;
 using Application.Interfaces;
-using Application.Photos.DTOs;
 using Domain.Interfaces;
 using MediatR;
 
@@ -14,7 +13,7 @@ public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
         CancellationToken cancellationToken)
     {
         var user = await unitOfWork.UsersRepository
-            .GetUserWithPhotosByUsernameAsync(userAccessor.GetCurrentUserUsername());
+            .GetUserWithPhotosAndFollowersByUsernameAsync(userAccessor.GetCurrentUserUsername());
 
         if (user is null || user.UserName is null || user.Email is null) return null;
 
@@ -26,12 +25,8 @@ public class GetCurrentUserHandler(IUnitOfWork unitOfWork,
             Email = user.Email,
             DateOfBirth = user.DateOfBirth,
             MainPhotoUrl = unitOfWork.UsersRepository.GetMainPhoto(user),
-            Photos = user.Photos.Select(p => new PhotoDto
-            {
-                PhotoId = p.PhotoId,
-                Url = p.Url,
-                IsMain = p.IsMain
-            }).ToList()
+            FollowersCount = user.Followers.Count,
+            FollowingCount = user.Following.Count
         });
     }
 }
