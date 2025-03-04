@@ -16,18 +16,15 @@ public class DeletePhotoHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return null;
 
-        var photo = unitOfWork.PhotosRepository.GetPhotoById(user, request.PhotoId);
+        var photo = user.Photos.FirstOrDefault(p => p.PhotoId == request.PhotoId);
 
         if (photo is null) return null;
 
         if (photo.IsMain) return Result<Unit>.Failure("Can't delete main photo.");
 
-        var cloudinaryResult = await photosService.DeletePhotoAsync(photo.PublicId);
+        await photosService.DeletePhotoAsync(photo.PublicId);
 
-        if (string.IsNullOrEmpty(cloudinaryResult)) return Result<Unit>
-                .Failure("Failed to delete photo from cloudinary.");
-
-        unitOfWork.PhotosRepository.DeletePhoto(user, photo);
+        user.Photos.Remove(photo);
 
         var result = await unitOfWork.SaveChangesAsync();
 

@@ -15,7 +15,7 @@ public class SetMainPhotoHandler(IUnitOfWork unitOfWork,
 
         if (user is null) return null;
 
-        var photo = unitOfWork.PhotosRepository.GetPhotoById(user, request.PhotoId);
+        var photo = user.Photos.FirstOrDefault(p => p.PhotoId == request.PhotoId);
 
         if (photo is null) return null;
 
