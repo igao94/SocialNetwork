@@ -45,11 +45,11 @@ public class AddPostHandler(IUnitOfWork unitOfWork,
                     Url = photoUploadResult.Url
                 };
 
-                unitOfWork.PostsRepository.AddPhotoToPost(post, photo);
+                post.PostPhotos.Add(photo);
             }
         }
 
-        unitOfWork.PostsRepository.CreatePost(user, post);
+        user.Posts.Add(post);
 
         var result = await unitOfWork.SaveChangesAsync();
 

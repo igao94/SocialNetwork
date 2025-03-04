@@ -28,7 +28,7 @@ public class DeletePostHandler(IUnitOfWork unitOfWork,
 
         foreach (var photo in post.PostPhotos) await photosService.DeletePhotoAsync(photo.PublicId);
 
-        unitOfWork.PostsRepository.DeletePostForUser(user, post);
+        user.Posts.Remove(post);
 
         var result = await unitOfWork.SaveChangesAsync();
 
