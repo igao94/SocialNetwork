@@ -20,7 +20,7 @@ public class LoginHandler(IUnitOfWork unitOfWork,
 
         var result = await unitOfWork.AccountRepository.CheckPasswordAsync(user, request.Password);
 
-        if (!result) return Result<AccountDto>.Failure("Invalid username or password.");
+        if (!result) return Result<AccountDto>.Failure("Invalid email or password.");
 
         return Result<AccountDto>.Success(new AccountDto
         {
